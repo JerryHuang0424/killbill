@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Killbill"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +21,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--通知监听服务-->
+        <service
+            android:name=".NotifyServer.NotifyService"
+            android:enabled="true"
+            android:label="测试通知服务"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
