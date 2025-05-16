@@ -7,18 +7,18 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import android.content.pm.PackageManager
-import org.wit.killbill.NotifyServer.NotifyHepler
+import NotifyHelper
 
 class NotifyService : NotificationListenerService() {
 
     companion object {
-        private const val TAG = "NotifyService"
+        public const val TAG = "NotifyService"
 
         // 定义常用应用包名常量
-        private const val QQ = "com.tencent.mobileqq"          // QQ
-        private const val WX = "com.tencent.mm"                // 微信
-        private const val HONOR_MMS= "com.hihonor.mms";        //荣耀短信
-        private const val Alipay="com.eg.android.AlipayGphone" //支付宝
+        public const val QQ = "com.tencent.mobileqq"          // QQ
+        public const val WX = "com.tencent.mm"                // 微信
+        public const val HONOR_MMS= "com.hihonor.mms";        //荣耀短信
+        public const val Alipay="com.eg.android.AlipayGphone" //支付宝
 
     }
 
@@ -27,15 +27,7 @@ class NotifyService : NotificationListenerService() {
      * @param sbn 状态栏通知对象
      */
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
-        sbn?.let { notification ->
-            when (notification.packageName) {
-                HONOR_MMS -> Log.d(TAG, "收到短信")
-                QQ -> Log.d(TAG, "收到QQ消息")
-                WX -> Log.d(TAG, "收到微信消息")
-                Alipay -> Log.d(TAG, "收到支付宝消息")
-                else -> Unit // 不做任何操作
-            }
-        }
+        NotifyHelper.getInstance().onReceive(sbn)
     }
 
     /**

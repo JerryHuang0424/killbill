@@ -1,30 +1,40 @@
 package org.wit.killbill.Activity
 
+import NotifyHelper
 import android.content.Intent
-import android.view.View
-import android.widget.Toast
 import android.os.Bundle
+import android.service.notification.StatusBarNotification
+import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import org.wit.killbill.R
+import org.wit.killbill.NotifyServer.NotifyListener
 import org.wit.killbill.NotifyServer.NotifyService
-import androidx.core.app.NotificationManagerCompat
+import org.wit.killbill.R
+import java.util.Locale
+import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.TimeZone
 
-
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NotifyListener {
     companion object {
         private const val REQUEST_CODE = 9527
     }
 
-    // 初始化 NotifyService 引用
+    private lateinit var textView: TextView
+
     private lateinit var notifyService: NotifyService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        textView = findViewById(R.id.textView)
+        NotifyHelper.getInstance().setNotifyListener(this)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -33,6 +43,29 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+    override fun onReceiveMessage(sbn: StatusBarNotification?) {
+        // 1. 空安全检查
+        val notification = sbn?.notification ?: return
+
+        // 2. 获取消息内容（使用安全调用和空合并操作符）
+        val msgContent = notification.tickerText?.toString() ?: ""
+
+        // 3. 格式化时间（添加时区处理）
+        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE).apply {
+            timeZone = TimeZone.getDefault() // 使用系统默认时区
+        }.format(Date(sbn.postTime))
+
+        // 4. 更安全的UI更新（使用runOnUiThread）
+        runOnUiThread {
+            textView.text = """
+            应用包名：${sbn.packageName}
+            消息内容：$msgContent
+            消息时间：$time
+          """.trimIndent()
+        }
+    }
     /**
      * 请求通知监听权限
      * @param view 触发视图
