@@ -7,6 +7,7 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import android.content.pm.PackageManager
+import org.wit.killbill.NotifyServer.NotifyHepler
 
 class NotifyService : NotificationListenerService() {
 
@@ -16,7 +17,8 @@ class NotifyService : NotificationListenerService() {
         // 定义常用应用包名常量
         private const val QQ = "com.tencent.mobileqq"          // QQ
         private const val WX = "com.tencent.mm"                // 微信
-        private const val HONOR_MMS= "com.hihonor.mms";//荣耀短信
+        private const val HONOR_MMS= "com.hihonor.mms";        //荣耀短信
+        private const val Alipay="com.eg.android.AlipayGphone" //支付宝
 
     }
 
@@ -30,6 +32,7 @@ class NotifyService : NotificationListenerService() {
                 HONOR_MMS -> Log.d(TAG, "收到短信")
                 QQ -> Log.d(TAG, "收到QQ消息")
                 WX -> Log.d(TAG, "收到微信消息")
+                Alipay -> Log.d(TAG, "收到支付宝消息")
                 else -> Unit // 不做任何操作
             }
         }
@@ -39,15 +42,16 @@ class NotifyService : NotificationListenerService() {
      * 当通知被移除时调用
      * @param sbn 状态栏通知对象
      */
-    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
-        sbn?.let { notification ->
-            when (notification.packageName) {
-                QQ -> Log.d(TAG, "移除QQ消息")
-                WX -> Log.d(TAG, "移除微信消息")
-                else -> Unit // 不做任何操作
-            }
-        }
-    }
+//    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
+//        sbn?.let { notification ->
+//            when (notification.packageName) {
+//                HONOR_MMS -> Log.d(TAG, "移除短信")
+//                QQ -> Log.d(TAG, "移除QQ消息")
+//                WX -> Log.d(TAG, "移除微信消息")
+//                Alipay -> Log.d(TAG, "移除支付宝消息")
+//            }
+//        }
+//    }
 
     /**
      * 当监听服务断开连接时调用
