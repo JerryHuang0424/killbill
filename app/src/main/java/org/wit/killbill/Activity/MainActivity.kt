@@ -7,18 +7,18 @@ import android.service.notification.StatusBarNotification
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.llw.easyutil.Easy
 import org.wit.killbill.NotifyServer.NotifyListener
 import org.wit.killbill.NotifyServer.NotifyService
 import org.wit.killbill.R
-import java.util.Locale
-import java.util.Date
+import org.wit.killbill.databinding.ActivityMainBinding
+import org.wit.killbill.models.Model
+import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.TimeZone
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), NotifyListener {
     companion object {
@@ -29,40 +29,53 @@ class MainActivity : AppCompatActivity(), NotifyListener {
 
     private lateinit var notifyService: NotifyService
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        Easy.initialize(this)
+        //Plant a log timber tree, to show collect all information when app execute.
+        Timber.plant(Timber.DebugTree())
+        Timber.i("Placemark Activity started..")
+
         textView = findViewById(R.id.textView)
+
+        //把mainActivity页面注册通知监听
         NotifyHelper.getInstance().setNotifyListener(this)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
     }
 
 
-
+    //收到通知时触发 onReceiveMessage()
     override fun onReceiveMessage(sbn: StatusBarNotification?) {
         // 1. 空安全检查
         val notification = sbn?.notification ?: return
+        var notifyModel = Model()
+        var notifyModels = ArrayList<Model>()
 
         // 2. 获取消息内容（使用安全调用和空合并操作符）
-        val msgContent = notification.tickerText?.toString() ?: ""
+        notifyModel.title = notification.tickerText?.toString() ?: ""
 
         // 3. 格式化时间（添加时区处理）
-        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE).apply {
-            timeZone = TimeZone.getDefault() // 使用系统默认时区
-        }.format(Date(sbn.postTime))
+//        notifyModel.time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE).apply {
+//            timeZone = TimeZone.getDefault() // 使用系统默认时区
+//        }.format(Date(sbn.postTime))
+        notifyModel.time =
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINESE).format(Date(sbn.getPostTime()))
+
+        if(notifyModel.title.isNotEmpty()){
+            notifyModels.add(notifyModel.copy())
+        }
 
         // 4. 更安全的UI更新（使用runOnUiThread）
         runOnUiThread {
             textView.text = """
             应用包名：${sbn.packageName}
-            消息内容：$msgContent
-            消息时间：$time
+            消息内容：${notifyModel.title}
+            消息时间：${notifyModel.time}
           """.trimIndent()
         }
     }
@@ -70,6 +83,7 @@ class MainActivity : AppCompatActivity(), NotifyListener {
      * 请求通知监听权限
      * @param view 触发视图
      */
+    //用户点击按钮触发 requestPermission(), binding with the button in the layout:
     fun requestPermission(view: View) {
         // 方法1：直接跳转通知监听权限设置页（推荐）
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS").apply {

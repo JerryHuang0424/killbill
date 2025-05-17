@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">killbill</string>
+    <string name="Allow_Permissions">Allow Listening Permissions</string>
 </resources>

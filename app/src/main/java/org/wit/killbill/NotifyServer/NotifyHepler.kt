@@ -13,6 +13,7 @@ class NotifyHelper {
         const val N_QQ = 2
         const val N_WX = 3
 
+        //注册通知监听
         fun getInstance(): NotifyHelper {
             return instance ?: synchronized(this) {
                 instance ?: NotifyHelper().also { instance = it }

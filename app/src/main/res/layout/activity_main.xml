@@ -8,6 +8,7 @@
     tools:context=".Activity.MainActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -17,9 +18,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        android:id="@+id/AllowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="请求权限"
+        android:text="@string/Allow_Permissions"
         android:onClick="requestPermission"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
