@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".Main.MainApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,14 +14,30 @@
         android:theme="@style/Theme.Killbill"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="org.wit.killbill.Activity.NotifyListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.lib_name"
+                android:value="" />
         </activity>
+<!--        <activity android:name=".Activity.PageMainActivity">-->
+<!--            <meta-data android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
+        <!--通知监听服务-->
+        <service
+            android:name=".NotifyServer.NotifyService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="测试通知服务"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
