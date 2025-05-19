@@ -1,38 +1,34 @@
-package org.wit.killbill.Activity
+package org.wit.killbill.activity
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import org.wit.killbill.Activity.NotifyListActivity.Companion.REQUEST_CODE
-import org.wit.killbill.Main.MainApp
-import org.wit.killbill.NotifyServer.NotifyListener
-import org.wit.killbill.NotifyServer.NotifyService
+import org.wit.killbill.main.MainApp
+import org.wit.killbill.notifyServer.NotifyListener
+import org.wit.killbill.notifyServer.NotifyService
 import org.wit.killbill.databinding.ActivityListMainBinding
-import org.wit.killbill.databinding.CardBinding
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.R
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import timber.log.Timber
+import org.wit.killbill.adapter.NotifyAdapter
+import org.wit.killbill.adapter.NotifyAdapterListener
+import org.wit.killbill.models.NotifyHelper
 
-class NotifyListActivity : AppCompatActivity(), NotifyListener{
+class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterListener{
     lateinit var app: MainApp
     private lateinit var binding: ActivityListMainBinding
     private lateinit var notifyService: NotifyService
-    var notifyModel = NotifyModel()
+    private var notifyModel = NotifyModel()
 
     companion object {
         private const val REQUEST_CODE = 9527
@@ -51,9 +47,10 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener{
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels)
+        binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
 
         //把NotifyListMain页面注册通知监听
+
         NotifyHelper.getInstance().setNotifyListener(this)
 
     }
@@ -71,22 +68,22 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener{
 
         // 3. 格式化时间（添加时区处理）
         notifyModel.time =
-            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.getPostTime()))
+            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.postTime))
 
         if(notifyModel.context.isNotEmpty()){
-            app.notifyNotifyModels.add(notifyModel.copy())
-            for (i in app.notifyNotifyModels.indices) {
-                Timber.i("NotifyModels[$i]:${this.app.notifyNotifyModels[i]}")
-            }
-            val intent = Intent(this, PageMainActivity::class.java).apply {
-                putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
-            startActivity(intent)
+            val intent = Intent(this, PageMainActivity::class.java)
+            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
+            getResult.launch(intent)
         }
-
-//        (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.notifyNotifyModels.size)
     }
+
+    override fun onCardClick(notify: NotifyModel) {
+        val launchIntentCard = Intent(this, PageMainActivity::class.java)
+        launchIntentCard.putExtra("Notify_edit", notify)
+        getResult.launch(launchIntentCard)
+    }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
@@ -101,21 +98,26 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener{
                 getResult.launch(launchIntent)
             }
         }
+        when(item.itemId){
+            R.id.item_setting -> {
+                requestPermission()
+                return true
+            }
+        }
         return super.onOptionsItemSelected(item)
     }
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == Activity.RESULT_OK){
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.size)
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
         }
     }
 
     /**
      * 请求通知监听权限
-     * @param view 触发视图
      */
     //用户点击按钮触发 requestPermission(), binding with the button in the layout:
-    fun requestPermission(view: View) {
+    private fun requestPermission() {
         // 方法1：直接跳转通知监听权限设置页（推荐）
         val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS").apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -146,35 +148,3 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener{
     }
 }
 
-
-
-
-
-class NotifyAdapter constructor(private var notifies: List<NotifyModel>) :
-    RecyclerView.Adapter<NotifyAdapter.MainHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
-        val binding = CardBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
-
-        return MainHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val notify = notifies[holder.adapterPosition]
-        holder.bind(notify)
-    }
-
-    override fun getItemCount(): Int = notifies.size
-
-    class MainHolder(private val binding : CardBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(notify: NotifyModel) {
-            binding.tvTitle.text = notify.title
-            binding.tvPackageName.text = notify.packageName
-            binding.tvContent.text = notify.context
-            binding.tvTime.text = notify.time
-        }
-    }
-}

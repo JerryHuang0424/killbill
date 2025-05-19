@@ -12,6 +12,7 @@ constraintlayout = "2.2.1"
 protoliteWellKnownTypes = "18.0.1"
 timber = "1.5.1"
 easyLibrary = "1.0.4"
+kotlinPlugin = "2.0.0-RC3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,4 +30,6 @@ easy-library = { group = "com.github.lilongweidev", name = "EasyLibrary", versio
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinPlugin" }
+
 

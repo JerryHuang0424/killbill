@@ -3,4 +3,9 @@
     <string name="Allow_Permissions">Allow Listening Permissions</string>
     <string name="Add_Bill">Adding</string>
     <string name="Set_for_app">Setting</string>
+    <string name="menu_cancal">Cancel</string>
+    <string name="save_card"> Save</string>
+    <string name="Add_card">Adding</string>
+
+
 </resources>

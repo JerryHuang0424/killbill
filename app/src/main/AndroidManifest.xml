@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".Main.MainApp"
+        android:name=".main.MainApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Killbill"
         tools:targetApi="31">
         <activity
-            android:name="org.wit.killbill.Activity.NotifyListActivity"
+            android:name="org.wit.killbill.activity.NotifyListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,13 +23,13 @@
             <meta-data android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".Activity.PageMainActivity">
+        <activity android:name=".activity.PageMainActivity">
             <meta-data android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <!--通知监听服务-->
         <service
-            android:name=".NotifyServer.NotifyService"
+            android:name=".notifyServer.NotifyService"
             android:enabled="true"
             android:exported="false"
             android:label="测试通知服务"
@@ -39,7 +39,7 @@
             </intent-filter>
         </service>
         <service
-            android:name=".BackGroundService.BackGroundService"
+            android:name=".backGroundService.BackGroundService"
             android:enabled="true"
             android:exported="false"/>
     </application>

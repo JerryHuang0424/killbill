@@ -1,6 +1,5 @@
-package org.wit.killbill.BackGroundService
+package org.wit.killbill.backGroundService
 
-import android.app.Service.START_STICKY
 import android.content.Intent
 import android.os.IBinder
 import android.app.Service

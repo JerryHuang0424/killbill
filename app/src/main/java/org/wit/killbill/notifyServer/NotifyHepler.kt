@@ -1,5 +1,7 @@
+package org.wit.killbill.models
+
 import android.service.notification.StatusBarNotification
-import org.wit.killbill.NotifyServer.NotifyListener
+import org.wit.killbill.notifyServer.NotifyListener
 
 
 class NotifyHelper {
@@ -7,11 +9,11 @@ class NotifyHelper {
     companion object {
         @Volatile
         private var instance: NotifyHelper? = null
-
-        const val N_MESSAGE = 0
-        const val N_ZFB = 1
-        const val N_QQ = 2
-        const val N_WX = 3
+//
+//        const val N_MESSAGE = 0
+//        const val N_ZFB = 1
+//        const val N_QQ = 2
+//        const val N_WX = 3
 
         //注册通知监听
         fun getInstance(): NotifyHelper {

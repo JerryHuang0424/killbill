@@ -1,13 +1,12 @@
-package org.wit.killbill.NotifyServer
+package org.wit.killbill.notifyServer
 
 import android.content.ComponentName
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import android.content.pm.PackageManager
-import NotifyHelper
+import org.wit.killbill.models.NotifyHelper
 
 class NotifyService : NotificationListenerService() {
 
