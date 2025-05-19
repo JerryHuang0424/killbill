@@ -23,10 +23,10 @@
             <meta-data android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-<!--        <activity android:name=".Activity.PageMainActivity">-->
-<!--            <meta-data android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
-<!--        </activity>-->
+        <activity android:name=".Activity.PageMainActivity">
+            <meta-data android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <!--通知监听服务-->
         <service
             android:name=".NotifyServer.NotifyService"
@@ -38,6 +38,10 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <service
+            android:name=".BackGroundService.BackGroundService"
+            android:enabled="true"
+            android:exported="false"/>
     </application>
 
 </manifest>
