@@ -33,7 +33,6 @@ class NotifyAdapter(private var notifies: List<NotifyModel>, private val listene
 
         fun bind(notify: NotifyModel, listener: NotifyAdapterListener) {
             binding.tvTitle.text = notify.title
-            binding.tvPackageName.text = notify.packageName
             binding.tvContent.text = notify.context
             binding.tvTime.text = notify.time
             binding.root.setOnClickListener{listener.onCardClick(notify)}

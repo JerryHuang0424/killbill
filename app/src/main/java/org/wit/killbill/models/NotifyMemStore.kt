@@ -29,7 +29,6 @@ class NotifyMemStore :NotifyStore{
     override fun update(notify: NotifyModel) {
         val foundNotify: NotifyModel? = notifyList.find{ p -> p.id ==notify.id}
         if(foundNotify!= null){
-            foundNotify.packageName = notify.packageName
             foundNotify.time = notify.title
             foundNotify.context = notify.context
             foundNotify.time = notify.time

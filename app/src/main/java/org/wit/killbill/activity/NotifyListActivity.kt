@@ -23,13 +23,14 @@ import java.util.Locale
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
 import org.wit.killbill.models.NotifyHelper
+import org.wit.killbill.messageDeal.messageHelper
 
 class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterListener{
     lateinit var app: MainApp
     private lateinit var binding: ActivityListMainBinding
     private lateinit var notifyService: NotifyService
     private var notifyModel = NotifyModel()
-
+    private val mshelper: messageHelper = messageHelper()
     companion object {
         private const val REQUEST_CODE = 9527
     }
@@ -60,7 +61,7 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
 
         val notification = sbn?.notification ?:return
         // 2. 获取消息内容（使用安全调用和空合并操作符）
-        notifyModel.packageName = sbn.packageName?.toString()?:""
+        val packageName = sbn.packageName?.toString()?:""
         val contextOri = notification.tickerText?.toString() ?: ""
         val parts= contextOri.split(":")
         notifyModel.title = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
@@ -70,11 +71,16 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         notifyModel.time =
             SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.postTime))
 
-        if(notifyModel.context.isNotEmpty()){
+        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(notifyModel.title)){
             val intent = Intent(this, PageMainActivity::class.java)
             intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
             getResult.launch(intent)
         }
+//        if(notifyModel.context.isNotEmpty()){
+//            val intent = Intent(this, PageMainActivity::class.java)
+//            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
+//            getResult.launch(intent)
+//        }
     }
 
     override fun onCardClick(notify: NotifyModel) {

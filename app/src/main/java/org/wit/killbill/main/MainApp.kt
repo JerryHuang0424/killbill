@@ -14,7 +14,7 @@ class MainApp : Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         Timber.i("Notify started")
-        notifyNotifyModels.createByMenu(NotifyModel(1,"huohuo", "yes", "2025-05-18 16:20", "com.tencent.mobileqq"))
+        notifyNotifyModels.createByMenu(NotifyModel(1,"huohuo", "yes", "2025-05-18 16:20"))
 
     }
 

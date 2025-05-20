@@ -9,6 +9,7 @@ import org.wit.killbill.main.MainApp
 import org.wit.killbill.R
 import org.wit.killbill.databinding.ActivityMainBinding
 import org.wit.killbill.models.NotifyModel
+import org.wit.killbill.messageDeal.messageHelper
 import timber.log.Timber
 
 
@@ -17,6 +18,7 @@ class PageMainActivity : AppCompatActivity(){
     private var notifyModel = NotifyModel()
     lateinit var app : MainApp
     private var edit = false
+    private val mshelper: messageHelper = messageHelper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +37,6 @@ class PageMainActivity : AppCompatActivity(){
         if(intent.hasExtra("Notify_edit")){
             edit = true
             notifyModel = intent.extras?.getParcelable("Notify_edit")!!
-            binding.etPackageName.setText(notifyModel.packageName)
             binding.etTitle.setText(notifyModel.title)
             binding.etContent.setText(notifyModel.context)
             binding.etTime.setText(notifyModel.time)
@@ -44,15 +45,13 @@ class PageMainActivity : AppCompatActivity(){
 
         if(intent.hasExtra("NOTIFICATION_DATA")){
             notifyModel = intent.extras?.getParcelable("NOTIFICATION_DATA")!!
-            binding.etPackageName.setText(notifyModel.packageName)
             binding.etTitle.setText(notifyModel.title)
-            binding.etContent.setText(notifyModel.context)
+            binding.etContent.setText(mshelper.dealMessage(notifyModel.context))
             binding.etTime.setText(notifyModel.time)
 
         }
 
         binding.btnSubmit.setOnClickListener() {
-            notifyModel.packageName = binding.etPackageName.text.toString()
             notifyModel.title = binding.etTitle.text.toString()
             notifyModel.context = binding.etContent.text.toString()
             notifyModel.time = binding.etTime.text.toString()
