@@ -1,8 +1,11 @@
 package org.wit.killbill.activity
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.service.notification.StatusBarNotification
 import android.view.Menu
 import android.view.MenuItem
@@ -11,19 +14,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.wit.killbill.R
+import org.wit.killbill.adapter.NotifyAdapter
+import org.wit.killbill.adapter.NotifyAdapterListener
+import org.wit.killbill.backGroundService.BackGroundService
+import org.wit.killbill.databinding.ActivityListMainBinding
 import org.wit.killbill.main.MainApp
+import org.wit.killbill.helper.messageHelper
+import org.wit.killbill.models.NotifyHelper
+import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.notifyServer.NotifyListener
 import org.wit.killbill.notifyServer.NotifyService
-import org.wit.killbill.databinding.ActivityListMainBinding
-import org.wit.killbill.models.NotifyModel
-import org.wit.killbill.R
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import org.wit.killbill.adapter.NotifyAdapter
-import org.wit.killbill.adapter.NotifyAdapterListener
-import org.wit.killbill.models.NotifyHelper
-import org.wit.killbill.messageDeal.messageHelper
+import android.content.Context
+
 
 class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterListener{
     lateinit var app: MainApp
@@ -31,11 +38,23 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
     private lateinit var notifyService: NotifyService
     private var notifyModel = NotifyModel()
     private val mshelper: messageHelper = messageHelper()
+    private var position: Int = 0
+
     companion object {
         private const val REQUEST_CODE = 9527
     }
 
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+            val downloadBinder = binder as? BackGroundService.DownloadBinder
+            downloadBinder?.startDownload()
+        }
 
+        override fun onServiceDisconnected(name: ComponentName?) {
+            // 处理服务意外断开的情况
+            Timber.i("Service disconnected")
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +70,10 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
 
         //把NotifyListMain页面注册通知监听
-
         NotifyHelper.getInstance().setNotifyListener(this)
 
+        val intent = Intent(this, BackGroundService::class.java)
+        bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onReceiveMessage(sbn: StatusBarNotification?) {
@@ -83,10 +103,11 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
 //        }
     }
 
-    override fun onCardClick(notify: NotifyModel) {
+    override fun onCardClick(notify: NotifyModel, pos: Int) {
         val launchIntentCard = Intent(this, PageMainActivity::class.java)
         launchIntentCard.putExtra("Notify_edit", notify)
-        getResult.launch(launchIntentCard)
+        position = pos
+        getClickResult.launch(launchIntentCard)
     }
 
 
@@ -116,6 +137,15 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         if(it.resultCode == Activity.RESULT_OK){
             (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
+        }
+    }
+
+    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        if(it.resultCode ==Activity.RESULT_OK){
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
+        }
+        if(it.resultCode ==99){
+                (binding.recyclerView.adapter)?.notifyItemRemoved(position)
         }
     }
 

@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 
 
 interface NotifyAdapterListener{
-    fun onCardClick(notify: NotifyModel)
+    fun onCardClick(notify: NotifyModel, position: Int)
 }
 
 class NotifyAdapter(private var notifies: List<NotifyModel>, private val listener: NotifyAdapterListener) :
@@ -35,7 +35,7 @@ class NotifyAdapter(private var notifies: List<NotifyModel>, private val listene
             binding.tvTitle.text = notify.title
             binding.tvContent.text = notify.context
             binding.tvTime.text = notify.time
-            binding.root.setOnClickListener{listener.onCardClick(notify)}
+            binding.root.setOnClickListener{listener.onCardClick(notify, adapterPosition)}
         }
     }
 }

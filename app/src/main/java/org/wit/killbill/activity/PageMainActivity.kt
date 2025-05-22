@@ -9,7 +9,7 @@ import org.wit.killbill.main.MainApp
 import org.wit.killbill.R
 import org.wit.killbill.databinding.ActivityMainBinding
 import org.wit.killbill.models.NotifyModel
-import org.wit.killbill.messageDeal.messageHelper
+import org.wit.killbill.helper.messageHelper
 import timber.log.Timber
 
 
@@ -22,6 +22,7 @@ class PageMainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -49,6 +50,12 @@ class PageMainActivity : AppCompatActivity(){
             binding.etContent.setText(mshelper.dealMessage(notifyModel.context))
             binding.etTime.setText(notifyModel.time)
 
+        }
+
+        binding.btnDelete.setOnClickListener(){
+            setResult(99)
+            app.notifyNotifyModels.delete(notifyModel)
+            finish()
         }
 
         binding.btnSubmit.setOnClickListener() {

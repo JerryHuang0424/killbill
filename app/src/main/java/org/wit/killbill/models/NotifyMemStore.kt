@@ -17,7 +17,7 @@ class NotifyMemStore :NotifyStore{
 
     override fun createByMenu(notify: NotifyModel) {
         notify.id = getId()
-        notifyList.add(notify)
+        notifyList.add(0, notify)
         logAll()
     }
 
@@ -34,6 +34,10 @@ class NotifyMemStore :NotifyStore{
             foundNotify.time = notify.time
             logAll()
         }
+    }
+
+    override fun delete(notify: NotifyModel) {
+        notifyList.remove(notify)
     }
     private fun logAll() {
         notifyList.forEach{ Timber.i("$it") }

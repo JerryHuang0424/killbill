@@ -13,6 +13,7 @@ protoliteWellKnownTypes = "18.0.1"
 timber = "1.5.1"
 easyLibrary = "1.0.4"
 kotlinPlugin = "2.0.0-RC3"
+gson = "2.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,6 +27,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 protolite-well-known-types = { group = "com.google.firebase", name = "protolite-well-known-types", version.ref = "protoliteWellKnownTypes" }
 timber = { module = "com.github.ajalt:timberkt", version.ref = "timber" }
 easy-library = { group = "com.github.lilongweidev", name = "EasyLibrary", version.ref = "easyLibrary"  }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

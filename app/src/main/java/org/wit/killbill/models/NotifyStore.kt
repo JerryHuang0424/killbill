@@ -5,4 +5,5 @@ interface NotifyStore{
     fun createByMenu(notify: NotifyModel)
     fun createByListener(notify: NotifyModel)
     fun update(notify: NotifyModel)
+    fun delete(notify: NotifyModel)
 }

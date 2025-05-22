@@ -113,6 +113,15 @@
                 android:backgroundTint="@color/teal_700"
                 android:textColor="@android:color/white"
                 style="@style/Widget.MaterialComponents.Button"/>
+
+            <Button
+                android:id="@+id/btnDelete"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/teal_700"
+                android:text="@string/Delete_card"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

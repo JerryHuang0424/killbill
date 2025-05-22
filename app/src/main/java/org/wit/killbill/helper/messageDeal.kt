@@ -1,4 +1,4 @@
-package org.wit.killbill.messageDeal
+package org.wit.killbill.helper
 
 interface messageDeal {
     fun checkTargetPackageName(packageName: String): Boolean

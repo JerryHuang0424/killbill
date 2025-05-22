@@ -50,6 +50,7 @@ dependencies {
     implementation (libs.easy.library)
     implementation(libs.protolite.well.known.types)
     implementation(libs.timber)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
