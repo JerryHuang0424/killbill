@@ -1,11 +1,8 @@
 package org.wit.killbill.activity
 
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.service.notification.StatusBarNotification
 import android.view.Menu
 import android.view.MenuItem
@@ -25,11 +22,9 @@ import org.wit.killbill.models.NotifyHelper
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.notifyServer.NotifyListener
 import org.wit.killbill.notifyServer.NotifyService
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.content.Context
 
 
 class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterListener{
@@ -44,17 +39,7 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         private const val REQUEST_CODE = 9527
     }
 
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
-            val downloadBinder = binder as? BackGroundService.DownloadBinder
-            downloadBinder?.startDownload()
-        }
 
-        override fun onServiceDisconnected(name: ComponentName?) {
-            // 处理服务意外断开的情况
-            Timber.i("Service disconnected")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,12 +54,14 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
 
+
         //把NotifyListMain页面注册通知监听
         NotifyHelper.getInstance().setNotifyListener(this)
 
-        val intent = Intent(this, BackGroundService::class.java)
-        bindService(intent, connection, Context.BIND_AUTO_CREATE)
+//        val intent = Intent(this, BackGroundService::class.java)
+//        startService(intent)
     }
+
 
     override fun onReceiveMessage(sbn: StatusBarNotification?) {
         // 1. 空安全检查
@@ -91,16 +78,16 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         notifyModel.time =
             SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.postTime))
 
-        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(notifyModel.title)){
-            val intent = Intent(this, PageMainActivity::class.java)
-            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
-            getResult.launch(intent)
-        }
-//        if(notifyModel.context.isNotEmpty()){
+//        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(notifyModel.title)){
 //            val intent = Intent(this, PageMainActivity::class.java)
 //            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
 //            getResult.launch(intent)
 //        }
+        if(notifyModel.context.isNotEmpty()){
+            val intent = Intent(this, PageMainActivity::class.java)
+            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
+            getResult.launch(intent)
+        }
     }
 
     override fun onCardClick(notify: NotifyModel, pos: Int) {
