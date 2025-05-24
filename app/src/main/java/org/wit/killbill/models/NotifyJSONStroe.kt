@@ -48,9 +48,10 @@ class NotifyJSONStroeJSONStore(private val context: Context) : NotifyStore {
     override fun update(notify: NotifyModel) {
         val foundNotify: NotifyModel? = notifies.find{ p -> p.id ==notify.id}
         if(foundNotify!= null){
-            foundNotify.time = notify.title
+            foundNotify.amount = notify.amount
             foundNotify.context = notify.context
             foundNotify.time = notify.time
+            foundNotify.type = notify.type
             logAll()
         }
     }

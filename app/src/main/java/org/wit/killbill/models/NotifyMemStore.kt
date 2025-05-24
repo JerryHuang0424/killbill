@@ -29,7 +29,7 @@ class NotifyMemStore :NotifyStore{
     override fun update(notify: NotifyModel) {
         val foundNotify: NotifyModel? = notifyList.find{ p -> p.id ==notify.id}
         if(foundNotify!= null){
-            foundNotify.time = notify.title
+            foundNotify.amount = notify.amount
             foundNotify.context = notify.context
             foundNotify.time = notify.time
             logAll()

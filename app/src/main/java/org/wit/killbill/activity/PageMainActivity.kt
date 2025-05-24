@@ -3,6 +3,8 @@ package org.wit.killbill.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.GridLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import org.wit.killbill.main.MainApp
@@ -11,6 +13,8 @@ import org.wit.killbill.databinding.ActivityMainBinding
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.helper.messageHelper
 import timber.log.Timber
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class PageMainActivity : AppCompatActivity(){
@@ -19,12 +23,17 @@ class PageMainActivity : AppCompatActivity(){
     lateinit var app : MainApp
     private var edit = false
     private val mshelper: messageHelper = messageHelper()
+    private lateinit var gridLayout: GridLayout
+    private var selectedButton: Button? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        gridLayout = findViewById(R.id.gridLayout)
 
         binding.toolbar2.title
         setSupportActionBar(binding.toolbar2)
@@ -35,10 +44,16 @@ class PageMainActivity : AppCompatActivity(){
 
         app = application as MainApp
 
+        val categories = arrayOf("餐饮", "日用", "交通", "学习", "教育", "医疗", "娱乐", "购物")
+
+        setupButtons(categories)
+
+
+
         if(intent.hasExtra("Notify_edit")){
             edit = true
             notifyModel = intent.extras?.getParcelable("Notify_edit")!!
-            binding.etTitle.setText(notifyModel.title)
+            binding.etTitle.setText(notifyModel.amount.toString())
             binding.etContent.setText(notifyModel.context)
             binding.etTime.setText(notifyModel.time)
             binding.btnSubmit.setText(R.string.save_card)
@@ -46,9 +61,9 @@ class PageMainActivity : AppCompatActivity(){
 
         if(intent.hasExtra("NOTIFICATION_DATA")){
             notifyModel = intent.extras?.getParcelable("NOTIFICATION_DATA")!!
-            binding.etTitle.setText(notifyModel.title)
+            binding.etTitle.setText(notifyModel.amount.toString())
             binding.etContent.setText(mshelper.dealMessage(notifyModel.context))
-            binding.etTime.setText(notifyModel.time)
+//            binding.etTime.setText(notifyModel.time)
 
         }
 
@@ -59,10 +74,17 @@ class PageMainActivity : AppCompatActivity(){
         }
 
         binding.btnSubmit.setOnClickListener() {
-            notifyModel.title = binding.etTitle.text.toString()
+            notifyModel.amount  = mshelper.dealMessage(binding.etTitle.text.toString())?.let { amountStr ->
+                try {
+                    BigDecimal(amountStr).setScale(2, RoundingMode.HALF_UP) // 精确到小数点后两位，四舍五入
+                } catch (e: NumberFormatException) {
+                    println("错误：金额格式无效 '$amountStr'，使用默认值 0.00")
+                    BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 默认值 0.00
+                }
+            } ?: BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 处理 dealMessage 返回 null 的情况
             notifyModel.context = binding.etContent.text.toString()
             notifyModel.time = binding.etTime.text.toString()
-            if(notifyModel.title.isEmpty()){
+            if(binding.etTitle.text?.isEmpty() ?: true){
                 Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG).show()
 
             }
@@ -80,6 +102,7 @@ class PageMainActivity : AppCompatActivity(){
 
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.cancel, menu)
         return super.onCreateOptionsMenu(menu)
@@ -94,4 +117,35 @@ class PageMainActivity : AppCompatActivity(){
         return super.onOptionsItemSelected(item)
     }
 
+    private fun setupButtons(categories: Array<String>) {
+        gridLayout.removeAllViews()
+
+        categories.forEach { category ->
+            val button = Button(this).apply {
+                text = category
+                setBackgroundResource(R.drawable.button_state_selector)  // 使用选择器而不是直接设置颜色
+                layoutParams = GridLayout.LayoutParams().apply {
+                    width = 0
+                    height = GridLayout.LayoutParams.WRAP_CONTENT
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(8.dpToPx(), 8.dpToPx(), 8.dpToPx(), 8.dpToPx())
+                }
+
+                setOnClickListener {
+                    updateSelectedButton(this)
+                    notifyModel.type = category
+                }
+            }
+            gridLayout.addView(button)
+        }
+    }
+
+    private fun updateSelectedButton(button: Button) {
+        selectedButton?.isSelected = false
+        button.isSelected = true
+        selectedButton = button
+    }
+
+    // dp转px扩展函数
+    private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
 }

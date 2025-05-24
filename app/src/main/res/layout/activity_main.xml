@@ -32,22 +32,18 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- 包名输入 -->
-            <com.google.android.material.textfield.TextInputLayout
+            <!-- 正确闭合的 GridLayout 写法 -->
+            <GridLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/gridLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Package Name"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:columnCount="4">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etPackageName"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:inputType="text"
-                    android:text="com.example.app"
-                    android:ellipsize="end"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                <!-- 子元素内容 -->
+            </GridLayout>
+
+
 
             <!-- 标题输入 -->
             <com.google.android.material.textfield.TextInputLayout

@@ -22,6 +22,8 @@ import org.wit.killbill.models.NotifyHelper
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.notifyServer.NotifyListener
 import org.wit.killbill.notifyServer.NotifyService
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -71,23 +73,32 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         val packageName = sbn.packageName?.toString()?:""
         val contextOri = notification.tickerText?.toString() ?: ""
         val parts= contextOri.split(":")
-        notifyModel.title = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
-        notifyModel.context = parts.getOrElse(1) { "" } // 第二个元素或空字符串
+        val Source = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
+        notifyModel.amount = mshelper.dealMessage(parts.getOrElse(1) { "" })?.let { amountStr ->
+            try {
+                BigDecimal(amountStr).setScale(2, RoundingMode.HALF_UP) // 精确到小数点后两位，四舍五入
+            } catch (e: NumberFormatException) {
+                println("错误：金额格式无效 '$amountStr'，使用默认值 0.00")
+                BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 默认值 0.00
+            }
+        } ?: BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 处理 dealMessage 返回 null 的情况
+        notifyModel.context = "测试接收消息"
+
 
         // 3. 格式化时间（添加时区处理）
         notifyModel.time =
             SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.postTime))
 
-//        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(notifyModel.title)){
-//            val intent = Intent(this, PageMainActivity::class.java)
-//            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
-//            getResult.launch(intent)
-//        }
-        if(notifyModel.context.isNotEmpty()){
+        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(Source)){
             val intent = Intent(this, PageMainActivity::class.java)
             intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
             getResult.launch(intent)
         }
+//        if(notifyModel.context.isNotEmpty()){
+//            val intent = Intent(this, PageMainActivity::class.java)
+//            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
+//            getResult.launch(intent)
+//        }
     }
 
     override fun onCardClick(notify: NotifyModel, pos: Int) {

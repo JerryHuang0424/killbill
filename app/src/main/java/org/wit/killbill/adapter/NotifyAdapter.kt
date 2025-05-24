@@ -32,7 +32,8 @@ class NotifyAdapter(private var notifies: List<NotifyModel>, private val listene
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(notify: NotifyModel, listener: NotifyAdapterListener) {
-            binding.tvTitle.text = notify.title
+            binding.tvPackageName.text = notify.type
+            binding.tvTitle.text = notify.amount.toString()
             binding.tvContent.text = notify.context
             binding.tvTime.text = notify.time
             binding.root.setOnClickListener{listener.onCardClick(notify, adapterPosition)}
