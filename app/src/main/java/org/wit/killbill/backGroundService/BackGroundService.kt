@@ -70,14 +70,12 @@ class BackGroundService : Service(), NotifyListener {
         val packageName = sbn.packageName?.toString()?:""
         val contextOri = notification.tickerText?.toString() ?: ""
         val parts= contextOri.split(":")
-        notifyModel.amount = mshelper.dealMessage(parts.getOrElse(1) { "" })?.let { amountStr ->
-            try {
-                BigDecimal(amountStr).setScale(2, RoundingMode.HALF_UP) // 精确到小数点后两位，四舍五入
-            } catch (e: NumberFormatException) {
-                println("错误：金额格式无效 '$amountStr'，使用默认值 0.00")
-                BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 默认值 0.00
-            }
-        } ?: BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 处理 dealMessage 返回 null 的情况
+        val money_message = mshelper.dealMessage(parts.getOrElse(1){""})
+        // 步骤1：转换为浮点数（若输入是整数如"158"，会自动补.0）
+        val amount = money_message?.toDoubleOrNull() ?: 0.0
+        // 步骤2：四舍五入到小数点后两位
+        val roundedAmount = "%.2f".format(amount).toDouble()
+        notifyModel.amount  = roundedAmount
          notifyModel.context = parts.getOrElse(1) { "" } // 第二个元素或空字符串
 
         // 3. 格式化时间（添加时区处理）

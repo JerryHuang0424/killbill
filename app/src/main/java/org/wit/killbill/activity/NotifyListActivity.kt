@@ -74,14 +74,11 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
         val contextOri = notification.tickerText?.toString() ?: ""
         val parts= contextOri.split(":")
         val Source = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
-        notifyModel.amount = mshelper.dealMessage(parts.getOrElse(1) { "" })?.let { amountStr ->
-            try {
-                BigDecimal(amountStr).setScale(2, RoundingMode.HALF_UP) // 精确到小数点后两位，四舍五入
-            } catch (e: NumberFormatException) {
-                println("错误：金额格式无效 '$amountStr'，使用默认值 0.00")
-                BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 默认值 0.00
-            }
-        } ?: BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 处理 dealMessage 返回 null 的情况
+        val money_message = mshelper.dealMessage(parts.getOrElse(1){""})
+        val amount = money_message?.toDoubleOrNull() ?: 0.0
+        // 步骤2：四舍五入到小数点后两位
+        val roundedAmount = "%.2f".format(amount).toDouble()
+        notifyModel.amount = roundedAmount
         notifyModel.context = "测试接收消息"
 
 

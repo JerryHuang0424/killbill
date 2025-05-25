@@ -74,14 +74,12 @@ class PageMainActivity : AppCompatActivity(){
         }
 
         binding.btnSubmit.setOnClickListener() {
-            notifyModel.amount  = mshelper.dealMessage(binding.etTitle.text.toString())?.let { amountStr ->
-                try {
-                    BigDecimal(amountStr).setScale(2, RoundingMode.HALF_UP) // 精确到小数点后两位，四舍五入
-                } catch (e: NumberFormatException) {
-                    println("错误：金额格式无效 '$amountStr'，使用默认值 0.00")
-                    BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 默认值 0.00
-                }
-            } ?: BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP) // 处理 dealMessage 返回 null 的情况
+            var money_amount = binding.etTitle.text.toString()
+            // 步骤1：转换为浮点数（若输入是整数如"158"，会自动补.0）
+            val amount = money_amount.toDoubleOrNull() ?: 0.0
+            // 步骤2：四舍五入到小数点后两位
+            val roundedAmount = "%.2f".format(amount).toDouble()
+            notifyModel.amount  = roundedAmount
             notifyModel.context = binding.etContent.text.toString()
             notifyModel.time = binding.etTime.text.toString()
             if(binding.etTitle.text?.isEmpty() ?: true){
