@@ -1,5 +1,6 @@
 package org.wit.killbill.activity
 
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -15,6 +16,10 @@ import org.wit.killbill.helper.messageHelper
 import timber.log.Timber
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 class PageMainActivity : AppCompatActivity(){
@@ -47,6 +52,12 @@ class PageMainActivity : AppCompatActivity(){
         val categories = arrayOf("餐饮", "日用", "交通", "学习", "教育", "医疗", "娱乐", "购物")
 
         setupButtons(categories)
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).apply {
+            timeZone = TimeZone.getDefault()  // 使用设备当前时区
+        }
+        val currentTime = Calendar.getInstance().time
+        binding.etTime.setText(sdf.format(currentTime))
 
 
 
@@ -81,6 +92,7 @@ class PageMainActivity : AppCompatActivity(){
             val roundedAmount = "%.2f".format(amount).toDouble()
             notifyModel.amount  = roundedAmount
             notifyModel.context = binding.etContent.text.toString()
+
             notifyModel.time = binding.etTime.text.toString()
             if(binding.etTitle.text?.isEmpty() ?: true){
                 Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG).show()
