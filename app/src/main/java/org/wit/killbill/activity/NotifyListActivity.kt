@@ -2,12 +2,14 @@ package org.wit.killbill.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.service.notification.StatusBarNotification
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,8 +24,6 @@ import org.wit.killbill.models.NotifyHelper
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.notifyServer.NotifyListener
 import org.wit.killbill.notifyServer.NotifyService
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -43,6 +43,7 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListMainBinding.inflate(layoutInflater)
@@ -58,10 +59,10 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
 
 
         //把NotifyListMain页面注册通知监听
-        NotifyHelper.getInstance().setNotifyListener(this)
+//        NotifyHelper.getInstance().setNotifyListener(this)
 
-//        val intent = Intent(this, BackGroundService::class.java)
-//        startService(intent)
+        val intent = Intent(this, BackGroundService::class.java)
+        startForegroundService(intent)
     }
 
 

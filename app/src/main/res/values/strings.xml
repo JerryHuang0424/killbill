@@ -7,6 +7,9 @@
     <string name="save_card"> Save</string>
     <string name="Add_card">Adding</string>
     <string name="Delete_card">Delete</string>
+    <string name="notification_title">KillBill Auto-Accounting</string>
+    <string name="notification_message">Processing your transactions automatically...</string>
+    <string name="notification_status">Working in the background</string>
 
 
 </resources>
