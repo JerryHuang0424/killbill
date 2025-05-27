@@ -1,8 +1,14 @@
 package org.wit.killbill.backGroundService
 
-import android.app.*
+import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.IBinder
 import android.service.notification.StatusBarNotification
@@ -17,7 +23,9 @@ import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.notifyServer.NotifyListener
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
+
 
 class BackGroundService : Service(), NotifyListener {
 
@@ -28,18 +36,20 @@ class BackGroundService : Service(), NotifyListener {
     private val NOTIFICATION_ID = 101
     private val CHANNEL_ID = "killbill_auto_accounting_channel"
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         Timber.i("Background server created")
         NotifyHelper.getInstance().setNotifyListener(this)
-        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        createNotificationChannel()
         Timber.i("Notify Listening start...")
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // Start as foreground service with custom notification
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        createNotificationChannel()
         startForegroundServiceWithCustomNotification()
         return START_STICKY
     }
@@ -85,6 +95,8 @@ class BackGroundService : Service(), NotifyListener {
 
         // Start foreground service
         startForeground(NOTIFICATION_ID, notification)
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(1, notification)
         Timber.i("Foreground service started...")
         isForeground = true
     }
@@ -94,13 +106,13 @@ class BackGroundService : Service(), NotifyListener {
         val packageName = sbn.packageName?.toString() ?: ""
         val contextOri = notification.tickerText?.toString() ?: ""
         val parts = contextOri.split(":")
+        val Source = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
         val money_message = mshelper.dealMessage(parts.getOrElse(1) { "" })
-
         // Process amount
         val amount = money_message?.toDoubleOrNull() ?: 0.0
         val roundedAmount = "%.2f".format(amount).toDouble()
         notifyModel.amount = roundedAmount
-        notifyModel.context = parts.getOrElse(1) { "" }
+        notifyModel.context = ""
 
         // Format time
         notifyModel.time = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE)
@@ -109,13 +121,15 @@ class BackGroundService : Service(), NotifyListener {
         // Update notification with transaction info
         updateNotificationWithTransaction(roundedAmount)
 
-        if (notifyModel.context.isNotEmpty()) {
+        if (notifyModel.context.isNotEmpty()&& mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(Source)) {
             val intent = Intent(this, PageMainActivity::class.java)
             intent.putExtra("NOTIFICATION_DATA", notifyModel)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
+
+
 
     private fun updateNotificationWithTransaction(amount: Double) {
         val contentView = RemoteViews(packageName, R.layout.notification)

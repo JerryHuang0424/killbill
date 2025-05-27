@@ -1,10 +1,12 @@
 package org.wit.killbill.activity
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
-import android.service.notification.StatusBarNotification
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,6 +15,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.permissionx.guolindev.PermissionX
 import org.wit.killbill.R
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
@@ -20,16 +23,12 @@ import org.wit.killbill.backGroundService.BackGroundService
 import org.wit.killbill.databinding.ActivityListMainBinding
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.helper.messageHelper
-import org.wit.killbill.models.NotifyHelper
 import org.wit.killbill.models.NotifyModel
-import org.wit.killbill.notifyServer.NotifyListener
 import org.wit.killbill.notifyServer.NotifyService
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 
-class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterListener{
+
+class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
     lateinit var app: MainApp
     private lateinit var binding: ActivityListMainBinding
     private lateinit var notifyService: NotifyService
@@ -60,44 +59,55 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
 
         //把NotifyListMain页面注册通知监听
 //        NotifyHelper.getInstance().setNotifyListener(this)
-
-        val intent = Intent(this, BackGroundService::class.java)
-        startForegroundService(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+            && !PermissionX.isGranted(this, android.Manifest.permission.POST_NOTIFICATIONS)) {
+            PermissionX.init(this)
+                .permissions(android.Manifest.permission.POST_NOTIFICATIONS)
+                .request { allGranted, _, _ ->
+                if (allGranted) {
+                    val intent = Intent(this, BackGroundService::class.java)
+                    startForegroundService(intent)
+                }
+            }
+        } else {
+            val intent = Intent(this, BackGroundService::class.java)
+            startForegroundService(intent)
+        }
     }
 
 
-    override fun onReceiveMessage(sbn: StatusBarNotification?) {
-        // 1. 空安全检查
-
-        val notification = sbn?.notification ?:return
-        // 2. 获取消息内容（使用安全调用和空合并操作符）
-        val packageName = sbn.packageName?.toString()?:""
-        val contextOri = notification.tickerText?.toString() ?: ""
-        val parts= contextOri.split(":")
-        val Source = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
-        val money_message = mshelper.dealMessage(parts.getOrElse(1){""})
-        val amount = money_message?.toDoubleOrNull() ?: 0.0
-        // 步骤2：四舍五入到小数点后两位
-        val roundedAmount = "%.2f".format(amount).toDouble()
-        notifyModel.amount = roundedAmount
-        notifyModel.context = "测试接收消息"
-
-
-        // 3. 格式化时间（添加时区处理）
-        notifyModel.time =
-            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.postTime))
-
-        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(Source)){
-            val intent = Intent(this, PageMainActivity::class.java)
-            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
-            getResult.launch(intent)
-        }
-//        if(notifyModel.context.isNotEmpty()){
+//    override fun onReceiveMessage(sbn: StatusBarNotification?) {
+//        // 1. 空安全检查
+//
+//        val notification = sbn?.notification ?:return
+//        // 2. 获取消息内容（使用安全调用和空合并操作符）
+//        val packageName = sbn.packageName?.toString()?:""
+//        val contextOri = notification.tickerText?.toString() ?: ""
+//        val parts= contextOri.split(":")
+//        val Source = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
+//        val money_message = mshelper.dealMessage(parts.getOrElse(1){""})
+//        val amount = money_message?.toDoubleOrNull() ?: 0.0
+//        // 步骤2：四舍五入到小数点后两位
+//        val roundedAmount = "%.2f".format(amount).toDouble()
+//        notifyModel.amount = roundedAmount
+//        notifyModel.context = "测试接收消息"
+//
+//
+//        // 3. 格式化时间（添加时区处理）
+//        notifyModel.time =
+//            SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).format(Date(sbn.postTime))
+//
+//        if(notifyModel.context.isNotEmpty() && mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(Source)){
 //            val intent = Intent(this, PageMainActivity::class.java)
 //            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
 //            getResult.launch(intent)
 //        }
-    }
+////        if(notifyModel.context.isNotEmpty()){
+////            val intent = Intent(this, PageMainActivity::class.java)
+////            intent.putExtra("NOTIFICATION_DATA", notifyModel) // 传递整个通知对象
+////            getResult.launch(intent)
+////        }
+//    }
 
     override fun onCardClick(notify: NotifyModel, pos: Int) {
         val launchIntentCard = Intent(this, PageMainActivity::class.java)
@@ -144,6 +154,7 @@ class NotifyListActivity : AppCompatActivity(), NotifyListener, NotifyAdapterLis
                 (binding.recyclerView.adapter)?.notifyItemRemoved(position)
         }
     }
+
 
     /**
      * 请求通知监听权限

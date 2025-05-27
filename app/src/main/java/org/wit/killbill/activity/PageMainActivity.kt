@@ -1,5 +1,6 @@
 package org.wit.killbill.activity
 
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.Menu
@@ -106,6 +107,7 @@ class PageMainActivity : AppCompatActivity(){
                     app.notifyNotifyModels.createByMenu(notifyModel)
                 }
                 setResult(RESULT_OK)
+                sendBroadcast(Intent("ACTION_REFRESH"))
                 finish()
             }
         }
