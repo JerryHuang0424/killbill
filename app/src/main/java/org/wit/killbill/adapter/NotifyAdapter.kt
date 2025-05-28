@@ -5,14 +5,14 @@ import androidx.recyclerview.widget.RecyclerView
 import org.wit.killbill.databinding.CardBinding
 import org.wit.killbill.models.NotifyModel
 import android.view.LayoutInflater
-
+import org.wit.killbill.activity.NotifyListActivity
 
 
 interface NotifyAdapterListener{
     fun onCardClick(notify: NotifyModel, position: Int)
 }
 
-class NotifyAdapter(private var notifies: List<NotifyModel>, private val listener: NotifyAdapterListener) :
+class NotifyAdapter(private var notifies: List<NotifyModel>, private val listener: NotifyListActivity) :
     RecyclerView.Adapter<NotifyAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {

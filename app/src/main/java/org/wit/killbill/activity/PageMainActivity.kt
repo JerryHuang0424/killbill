@@ -1,6 +1,5 @@
 package org.wit.killbill.activity
 
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.Menu
@@ -8,20 +7,14 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.GridLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.trusted.sharing.ShareData
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.R
-import org.wit.killbill.backGroundService.SharedViewModel
 import org.wit.killbill.databinding.ActivityMainBinding
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.helper.messageHelper
 import timber.log.Timber
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -109,10 +102,7 @@ class PageMainActivity : AppCompatActivity(){
                 }else{
                     app.notifyNotifyModels.createByMenu(notifyModel)
                 }
-                setResult(RESULT_OK)
-
-                val sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
-                sharedViewModel.triggerRefresh()
+//                setResult(RESULT_OK)
                 finish()
             }
         }

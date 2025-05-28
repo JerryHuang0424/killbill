@@ -106,7 +106,7 @@ class BackGroundService : Service(), NotifyListener {
         val packageName = sbn.packageName?.toString() ?: ""
         val contextOri = notification.tickerText?.toString() ?: ""
         val parts = contextOri.split(":")
-        val Source = parts.getOrElse(0) { "" }  // 第一个元素或空字符串
+        val Source = parts.getOrElse(1) { "" }  // 第一个元素或空字符串
         val money_message = mshelper.dealMessage(parts.getOrElse(1) { "" })
         // Process amount
         val amount = money_message?.toDoubleOrNull() ?: 0.0
