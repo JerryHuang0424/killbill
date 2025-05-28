@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.gson)
     implementation(libs.permissionx)
+    implementation(libs.androidx.browser)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

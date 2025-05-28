@@ -14,12 +14,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.permissionx.guolindev.PermissionX
 import org.wit.killbill.R
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
 import org.wit.killbill.backGroundService.BackGroundService
+import org.wit.killbill.backGroundService.SharedViewModel
 import org.wit.killbill.databinding.ActivityListMainBinding
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.helper.messageHelper
@@ -73,6 +75,23 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
             val intent = Intent(this, BackGroundService::class.java)
             startForegroundService(intent)
         }
+
+        // 获取 SharedViewModel 实例
+        var sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
+        // 观察刷新事件
+        sharedViewModel.refreshEvent.observe(this) { shouldRefresh ->
+            if (shouldRefresh) {
+                // 你的数据加载方法
+                (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
+                // 重置刷新标志，避免重复触发
+                sharedViewModel.triggerRefresh()
+            }
+        }
+    }
+
+    private fun loadData() {
+        // 实现你的数据加载逻辑
+        // 例如：adapter.notifyDataSetChanged()
     }
 
 

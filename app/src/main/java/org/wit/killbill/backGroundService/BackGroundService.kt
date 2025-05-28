@@ -112,7 +112,7 @@ class BackGroundService : Service(), NotifyListener {
         val amount = money_message?.toDoubleOrNull() ?: 0.0
         val roundedAmount = "%.2f".format(amount).toDouble()
         notifyModel.amount = roundedAmount
-        notifyModel.context = ""
+        notifyModel.context = "测试服务"
 
         // Format time
         notifyModel.time = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE)
@@ -121,7 +121,7 @@ class BackGroundService : Service(), NotifyListener {
         // Update notification with transaction info
         updateNotificationWithTransaction(roundedAmount)
 
-        if (notifyModel.context.isNotEmpty()&& mshelper.checkTargetPackageName(packageName) && mshelper.checkPaymentTitle(Source)) {
+        if (notifyModel.context.isNotEmpty()&& mshelper.checkTargetPackageName(packageName)&& mshelper.checkPaymentTitle(Source)) {
             val intent = Intent(this, PageMainActivity::class.java)
             intent.putExtra("NOTIFICATION_DATA", notifyModel)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

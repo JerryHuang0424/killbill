@@ -8,9 +8,12 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.GridLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.trusted.sharing.ShareData
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.R
+import org.wit.killbill.backGroundService.SharedViewModel
 import org.wit.killbill.databinding.ActivityMainBinding
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.helper.messageHelper
@@ -107,7 +110,9 @@ class PageMainActivity : AppCompatActivity(){
                     app.notifyNotifyModels.createByMenu(notifyModel)
                 }
                 setResult(RESULT_OK)
-                sendBroadcast(Intent("ACTION_REFRESH"))
+
+                val sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+                sharedViewModel.triggerRefresh()
                 finish()
             }
         }

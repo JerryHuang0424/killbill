@@ -15,6 +15,7 @@ timber = "1.5.1"
 easyLibrary = "1.0.4"
 kotlinPlugin = "2.0.0-RC3"
 gson = "2.11.0"
+browser = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +31,7 @@ protolite-well-known-types = { group = "com.google.firebase", name = "protolite-
 timber = { module = "com.github.ajalt:timberkt", version.ref = "timber" }
 easy-library = { group = "com.github.lilongweidev", name = "EasyLibrary", version.ref = "easyLibrary"  }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 
 
 [plugins]
