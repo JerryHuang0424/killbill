@@ -1,6 +1,6 @@
 package org.wit.killbill.activity
 
-import android.app.Activity
+//import org.wit.killbill.helper.messageHelper
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.permissionx.guolindev.PermissionX
 import org.wit.killbill.R
 import org.wit.killbill.adapter.NotifyAdapter
@@ -21,7 +22,6 @@ import org.wit.killbill.adapter.NotifyAdapterListener
 import org.wit.killbill.backGroundService.BackGroundService
 import org.wit.killbill.databinding.ActivityListMainBinding
 import org.wit.killbill.main.MainApp
-//import org.wit.killbill.helper.messageHelper
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.notifyServer.NotifyService
 import java.util.Calendar
@@ -77,6 +77,11 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
             }
         }
 
+        val bottomNav = findViewById<BottomNavigationView?>(R.id.bottom_navigation)
+        bottomNav.setOnNavigationItemSelectedListener(navListener)
+        binding.bottomNavigation.selectedItemId = R.id.navigation_today
+
+
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
@@ -104,6 +109,23 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
 
     }
 
+    private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        val targetActivity = when (item.itemId) {
+            R.id.navigation_today -> NotifyListActivity::class.java
+            R.id.navigation_stats -> statisticActivity::class.java
+            // R.id.navigation_settings -> SettingsActivity::class.java
+            else -> null
+        }
+
+        targetActivity?.let {
+            if (this::class.java != it) {  // 检查当前Activity是否已经是目标Activity
+                startActivity(Intent(this, it))
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+        } ?: false
+
+        true  // 总是返回true表示处理了点击事件
+    }
     override fun onCardClick(notify: NotifyModel, pos: Int) {
         val launchIntentCard = Intent(this, PageMainActivity::class.java)
         launchIntentCard.putExtra("Notify_edit", notify)
@@ -147,13 +169,13 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
     }
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if(it.resultCode == Activity.RESULT_OK){
+        if(it.resultCode == RESULT_OK){
             (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
         }
     }
 
     private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if(it.resultCode ==Activity.RESULT_OK){
+        if(it.resultCode == RESULT_OK){
             (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
         }
         if(it.resultCode ==99){

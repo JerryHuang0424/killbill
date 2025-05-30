@@ -5,119 +5,129 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 主要内容区域 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_above="@id/bottom_navigation">
 
         <!-- 顶部工具栏 -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="match_parent"
                 android:background="?attr/colorPrimary" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- 内容区域（固定间距布局） -->
-        <LinearLayout
+        <!-- 使用ScrollView包裹内容区域 -->
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:fillViewport="true">
 
-            <!-- 正确闭合的 GridLayout 写法 -->
-            <GridLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/gridLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="4">
+                android:orientation="vertical"
+                android:padding="24dp">
 
-                <!-- 子元素内容 -->
-            </GridLayout>
+                <!-- GridLayout -->
+                <GridLayout
+                    android:id="@+id/gridLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4">
 
+                    <!-- 子元素内容 -->
+                </GridLayout>
 
+                <!-- 标题输入 -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/Add_card_title_hint">
 
-            <!-- 标题输入 -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Title"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:inputType="textCapSentences"
+                        android:maxLines="1"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTitle"
+                <!-- 内容输入 -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/Add_card_context_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:maxLines="5"
+                        android:text="" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- 时间输入 -->
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:hint="@string/Add_card_time_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="none"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textSize="14sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- 提交按钮 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubmit"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:inputType="textCapSentences"
-                    android:text="This is a notification title"
-                    android:ellipsize="end"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/teal_700"
+                    android:text="@string/Add_card"
+                    android:textColor="@android:color/white" />
 
-            <!-- 内容输入 -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Content"
-                android:layout_marginBottom="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etContent"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:text="This is the detailed content..."
-                    android:maxLines="5"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- 优化后的时间输入 -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Time"
-                android:layout_marginBottom="24dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTime"
+                <!-- 删除按钮 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:text="2023-11-20 14:30"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textSize="14sp"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- 提交按钮 -->
-            <Button
-                android:id="@+id/btnSubmit"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="@string/Add_card"
-                android:backgroundTint="@color/teal_700"
-                android:textColor="@android:color/white"
-                style="@style/Widget.MaterialComponents.Button"/>
-
-            <Button
-                android:id="@+id/btnDelete"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:backgroundTint="@color/teal_700"
-                android:text="@string/Delete_card"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
+                    android:backgroundTint="@color/teal_700"
+                    android:text="@string/Delete_card"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
+
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

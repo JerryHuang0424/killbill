@@ -16,6 +16,8 @@ easyLibrary = "1.0.4"
 kotlinPlugin = "2.0.0-RC3"
 gson = "2.11.0"
 browser = "1.8.0"
+mpandroidchart = "3.1.0"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,7 +34,7 @@ timber = { module = "com.github.ajalt:timberkt", version.ref = "timber" }
 easy-library = { group = "com.github.lilongweidev", name = "EasyLibrary", version.ref = "easyLibrary"  }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
-
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

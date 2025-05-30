@@ -12,7 +12,7 @@ interface NotifyAdapterListener{
     fun onCardClick(notify: NotifyModel, position: Int)
 }
 
-class NotifyAdapter(private var notifies: List<NotifyModel>, private val listener: NotifyListActivity) :
+class NotifyAdapter(private var notifies: List<NotifyModel>, private val listener: NotifyAdapterListener ) :
     RecyclerView.Adapter<NotifyAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
