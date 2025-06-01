@@ -1,179 +1,110 @@
-package org.wit.killbill.activity
+package org.wit.killbill.fragment
 
-//import org.wit.killbill.helper.messageHelper
+import android.app.Activity.RESULT_OK
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.permissionx.guolindev.PermissionX
 import org.wit.killbill.R
+import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
-import org.wit.killbill.backGroundService.BackGroundService
 import org.wit.killbill.databinding.ActivityListMainBinding
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.models.NotifyModel
-import org.wit.killbill.notifyServer.NotifyService
-import java.util.Calendar
 
-
-class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
-    lateinit var app: MainApp
-    private lateinit var binding: ActivityListMainBinding
-    private lateinit var notifyService: NotifyService
-//    private var notifyModel = NotifyModel()
-//    private val mshelper: messageHelper = messageHelper()
-    private var position: Int = 0
-    private val refreshHandler = Handler(Looper.getMainLooper())
-    private val refreshInterval = 1000L // 1秒 = 1000毫秒
-
+class NotifyListFragment : Fragment(), NotifyAdapterListener {
     companion object {
-        private const val REQUEST_CODE = 9527
+        // 添加 newInstance 方法
+        fun newInstance(): NotifyListFragment {
+            return NotifyListFragment()
+        }
+    }
+    private var _binding: ActivityListMainBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var app: MainApp
+    private var position: Int = 0
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = ActivityListMainBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityListMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.toolbar.title = title
-        setSupportActionBar(binding.toolbar)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        app = application as MainApp
+        app = requireActivity().application as MainApp
 
-        val bottomNav = findViewById<BottomNavigationView?>(R.id.bottom_navigation)
-        bottomNav.setOnNavigationItemSelectedListener(navListener)
-        binding.bottomNavigation.selectedItemId = R.id.navigation_today
+        // 设置Toolbar
+        binding.toolbar.title = "账单列表"
+        (requireActivity() as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
+        setHasOptionsMenu(true)
 
-
-        val layoutManager = LinearLayoutManager(this)
+        // 初始化RecyclerView
+        val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
-        //把Adapter里面的NotifyModel改为筛选过的
-//        binding.recyclerView.adapter = NotifyAdapter(currentMonthList, this)
-
-        //每秒执行一次界面刷新
-        startAutoRefresh()
-
     }
 
-    private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        val targetActivity = when (item.itemId) {
-            R.id.navigation_today -> NotifyListActivity::class.java
-            R.id.navigation_stats -> statisticActivity::class.java
-//            R.id.navigation_settings -> dailyActivity::class.java
-            else -> null
-        }
-
-        targetActivity?.let {
-            if (this::class.java != it) {  // 检查当前Activity是否已经是目标Activity
-                startActivity(Intent(this, it))
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            }
-        } ?: false
-
-        true  // 总是返回true表示处理了点击事件
-    }
-    override fun onCardClick(notify: NotifyModel, pos: Int) {
-        val launchIntentCard = Intent(this, PageMainActivity::class.java)
-        launchIntentCard.putExtra("Notify_edit", notify)
-        position = pos
-        getClickResult.launch(launchIntentCard)
+    @Deprecated("Deprecated in Java")
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_add, menu)
+        inflater.inflate(R.menu.menu_setting, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private val refreshRunnable = object : Runnable {
-        override fun run() {
-            // 获取最新数据并更新 Adapter
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
-            // 再次延迟执行（实现循环）
-            refreshHandler.postDelayed(this, refreshInterval)
-        }
-    }
-
-    private fun startAutoRefresh() {
-        refreshHandler.postDelayed(refreshRunnable, refreshInterval)
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_add, menu)
-        menuInflater.inflate(R.menu.menu_setting, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when(item.itemId) {
             R.id.item_add -> {
-                val launchIntent = Intent(this, PageMainActivity::class.java)
-                getResult.launch(launchIntent)            }
-        }
-        when(item.itemId){
+                val launchIntent = Intent(requireContext(), PageMainActivity::class.java)
+                getResult.launch(launchIntent)
+                return true
+            }
             R.id.item_setting -> {
-                requestPermission()
+                // 处理设置菜单项
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if(it.resultCode == RESULT_OK){
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
+    override fun onCardClick(notify: NotifyModel, pos: Int) {
+        val launchIntentCard = Intent(requireContext(), PageMainActivity::class.java)
+        launchIntentCard.putExtra("Notify_edit", notify)
+        position = pos
+        getClickResult.launch(launchIntentCard)
+    }
+
+    private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if(it.resultCode == RESULT_OK) {
+            binding.recyclerView.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
         }
     }
 
-    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-        if(it.resultCode == RESULT_OK){
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
+    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if(it.resultCode == RESULT_OK) {
+            binding.recyclerView.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
         }
-        if(it.resultCode ==99){
-                (binding.recyclerView.adapter)?.notifyItemRemoved(position)
-        }
-    }
-
-
-    /**
-     * 请求通知监听权限
-     */
-    //用户点击按钮触发 requestPermission(), binding with the button in the layout:
-    private fun requestPermission() {
-        // 方法1：直接跳转通知监听权限设置页（推荐）
-        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS").apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        startActivity(intent)
-
-        // 方法2：检查并提示用户手动开启（可选）
-        if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
-            Toast.makeText(this, "请找到本应用并开启通知监听权限", Toast.LENGTH_LONG).show()
+        if(it.resultCode == 99) {
+            binding.recyclerView.adapter?.notifyItemRemoved(position)
         }
     }
 
-    private fun showMsg(msg: String) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE) {
-            if (notifyService.isNLServiceEnabled()) {
-                showMsg("通知服务已开启")
-                notifyService.toggleNotificationListenerService(true)
-            } else {
-                showMsg("通知服务未开启")
-                notifyService.toggleNotificationListenerService(false)
-            }
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
-

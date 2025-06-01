@@ -21,26 +21,36 @@
         tools:targetApi="31">
 
         <activity
-            android:name="org.wit.killbill.activity.NotifyListActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <meta-data android:name="android.app.lib_name"
-                android:value="" />
+                            android:value="" />
         </activity>
-        <activity android:name=".activity.PageMainActivity">
-            <meta-data android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity android:name=".activity.statisticActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name="org.wit.killbill.activity.dailyActivity"
-            android:exported="true">
-        </activity>
+<!--        <activity-->
+<!--            android:name="org.wit.killbill.activity.NotifyListActivity"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--            <meta-data android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
+<!--        <activity android:name=".activity.PageMainActivity">-->
+<!--            <meta-data android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
+<!--        <activity android:name=".activity.statisticActivity"-->
+<!--            android:exported="true">-->
+<!--        </activity>-->
+<!--        <activity-->
+<!--            android:name="org.wit.killbill.activity.dailyActivity"-->
+<!--            android:exported="true">-->
+<!--        </activity>-->
 
         <!--通知监听服务-->
         <service

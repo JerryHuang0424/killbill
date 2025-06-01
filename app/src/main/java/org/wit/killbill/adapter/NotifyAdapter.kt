@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.wit.killbill.databinding.CardBinding
 import org.wit.killbill.models.NotifyModel
 import android.view.LayoutInflater
-import org.wit.killbill.activity.NotifyListActivity
 
 
 interface NotifyAdapterListener{

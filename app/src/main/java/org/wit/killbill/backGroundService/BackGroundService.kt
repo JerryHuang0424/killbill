@@ -15,7 +15,7 @@ import android.service.notification.StatusBarNotification
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import org.wit.killbill.R
-import org.wit.killbill.activity.NotifyListActivity
+import org.wit.killbill.activity.MainActivity
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.helper.messageHelper
 import org.wit.killbill.models.NotifyHelper
@@ -75,7 +75,7 @@ class BackGroundService : Service(), NotifyListener {
         contentView.setTextViewText(R.id.notification_status, "Monitoring transactions...")
 
         // Create pending intent for when notification is tapped
-        val notificationIntent = Intent(this, NotifyListActivity::class.java)
+        val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
             0,
