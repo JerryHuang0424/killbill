@@ -99,7 +99,7 @@ class statisticActivity: AppCompatActivity(),NotifyAdapterListener {
         val targetActivity = when (item.itemId) {
             R.id.navigation_today -> NotifyListActivity::class.java
             R.id.navigation_stats -> statisticActivity::class.java
-            // R.id.navigation_settings -> SettingsActivity::class.java
+//            R.id.navigation_settings -> dailyActivity::class.java
             else -> null
         }
 

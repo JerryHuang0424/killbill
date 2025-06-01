@@ -41,8 +41,6 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
         private const val REQUEST_CODE = 9527
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,30 +50,6 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
         setSupportActionBar(binding.toolbar)
 
         app = application as MainApp
-
-        //设置特定的时间，筛选全部账单中符合时间规定
-        val tempList = app.notifyNotifyModels.findAll()
-        //把时间设置为本年本月，筛选本月创建的账单
-        // 获取当前的年份和月份
-        val calendar = Calendar.getInstance()
-        val currentYear = calendar.get(Calendar.YEAR)
-        val currentMonth = calendar.get(Calendar.MONTH) + 1  // Calendar.MONTH 返回 0-11
-
-        val currentYearMonthList = mutableListOf<NotifyModel>()
-
-        for (notifyModel in tempList) {
-            // 假设 notifyModel.time 是 "yyyy-MM" 格式（例如 "2023-09"）
-            val dateParts = notifyModel.time.split("-")
-            if (dateParts.size >= 2) {
-                val modelYear = dateParts[0].toInt()
-                val modelMonth = dateParts[1].toInt()
-
-                // 检查年份和月份是否都匹配
-                if (modelYear == currentYear && modelMonth == currentMonth) {
-                    currentYearMonthList.add(notifyModel)
-                }
-            }
-        }
 
         val bottomNav = findViewById<BottomNavigationView?>(R.id.bottom_navigation)
         bottomNav.setOnNavigationItemSelectedListener(navListener)
@@ -91,29 +65,13 @@ class NotifyListActivity : AppCompatActivity(), NotifyAdapterListener{
         //每秒执行一次界面刷新
         startAutoRefresh()
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-            && !PermissionX.isGranted(this, android.Manifest.permission.POST_NOTIFICATIONS)) {
-            PermissionX.init(this)
-                .permissions(android.Manifest.permission.POST_NOTIFICATIONS)
-                .request { allGranted, _, _ ->
-                if (allGranted) {
-                    val intent = Intent(this, BackGroundService::class.java)
-                    startForegroundService(intent)
-                }
-            }
-        } else {
-            val intent = Intent(this, BackGroundService::class.java)
-            startForegroundService(intent)
-        }
-
     }
 
     private val navListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val targetActivity = when (item.itemId) {
             R.id.navigation_today -> NotifyListActivity::class.java
             R.id.navigation_stats -> statisticActivity::class.java
-            // R.id.navigation_settings -> SettingsActivity::class.java
+//            R.id.navigation_settings -> dailyActivity::class.java
             else -> null
         }
 
