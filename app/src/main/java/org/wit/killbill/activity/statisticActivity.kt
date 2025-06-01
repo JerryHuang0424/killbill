@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -39,7 +40,7 @@ class statisticActivity: AppCompatActivity(),NotifyAdapterListener {
 
         app = application as MainApp
 
-        val bottomNav = findViewById<BottomNavigationView?>(org.wit.killbill.R.id.bottom_navigation)
+        val bottomNav = findViewById<BottomNavigationView?>(R.id.bottom_navigation)
         bottomNav.setOnNavigationItemSelectedListener(navListener)
         binding.bottomNavigation.selectedItemId = R.id.navigation_stats
 
@@ -130,6 +131,20 @@ class statisticActivity: AppCompatActivity(),NotifyAdapterListener {
 
     private fun setupPieChart(entries: List<PieEntry>) {
         val pieChart = binding.pieChart
+
+        // 检查数据是否为空
+        if (entries.isEmpty()) {
+            // 隐藏饼图，显示提示文本
+            pieChart.visibility = View.GONE
+            binding.emptyText.visibility = View.VISIBLE
+            binding.emptyText.text = "本月暂无消费记录"
+            return
+        }
+
+        // 正常显示饼图（原有逻辑）
+        pieChart.visibility = View.VISIBLE
+        binding.emptyText.visibility = View.GONE
+
         val colors = listOf(
             "#FF6384".toColorInt(),
             "#36A2EB".toColorInt(),
