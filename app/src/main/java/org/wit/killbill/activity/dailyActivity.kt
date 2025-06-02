@@ -13,13 +13,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.permissionx.guolindev.PermissionX
-import org.wit.killbill.R
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
-import org.wit.killbill.backGroundService.BackGroundService
 import org.wit.killbill.databinding.DailyStatusBinding
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.models.NotifyModel
@@ -32,12 +28,14 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
             return DailyFragment()
         }
     }
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var refreshRunnable: Runnable
+    private val refreshInterval = 1000L // 1秒
     private var _binding: DailyStatusBinding? = null
     private val binding get() = _binding!!
     private lateinit var app: MainApp
     private var position: Int = 0
-    private val refreshHandler = Handler(Looper.getMainLooper())
-    private val refreshInterval = 1000L // 1秒 = 1000毫秒
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -52,10 +50,25 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app = requireActivity().application as MainApp
+        refreshRunnable = object : Runnable {
+            override fun run() {
+                updateRecyclerView()
+                handler.postDelayed(this, refreshInterval) // 循环执行
+            }
+        }
 
         startAutoRefresh()
 
+        app = requireActivity().application as MainApp
+
+        refreshRunnable = object : Runnable {
+            override fun run() {
+                updateRecyclerView() // 刷新数据
+                handler.postDelayed(this, refreshInterval) // 循环执行
+            }
+        }
+
+        startAutoRefresh()
         // 设置特定的时间，筛选全部账单中符合时间规定
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -90,14 +103,26 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
     }
 
     private fun startAutoRefresh() {
-        refreshHandler.postDelayed(refreshRunnable, refreshInterval)
+        handler.postDelayed(refreshRunnable, refreshInterval)
     }
 
-    private val refreshRunnable = object : Runnable {
-        override fun run() {
-            binding.rvBillList.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
-            refreshHandler.postDelayed(this, refreshInterval)
-        }
+    private fun stopAutoRefresh() {
+        handler.removeCallbacks(refreshRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAutoRefresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startAutoRefresh()
+    }
+
+    fun updateRecyclerView(){
+        binding.rvBillList.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
+
     }
 
     override fun onCardClick(notify: NotifyModel, pos: Int) {
@@ -118,7 +143,7 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopAutoRefresh()
         _binding = null
-        refreshHandler.removeCallbacks(refreshRunnable)
     }
 }

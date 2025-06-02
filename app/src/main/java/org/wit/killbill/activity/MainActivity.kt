@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
@@ -21,9 +23,11 @@ import org.wit.killbill.notifyServer.NotifyService
 
 
 class MainActivity : AppCompatActivity() {
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var refreshRunnable: Runnable
+    private val refreshInterval = 1000L // 1秒
     private lateinit var binding: MainActivityBinding
-    private val refreshHandler = Handler(Looper.getMainLooper())
-    private val refreshInterval = 1000L // 1秒 = 1000毫秒
+    private lateinit var notifyService: NotifyService
     companion object {
         private const val REQUEST_CODE = 9527
     }
@@ -31,8 +35,16 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        updateRunnable = object : Runnable {
+//            override fun run() {
+//                updateAllFragments()
+//                refreshHandler.postDelayed(this, refreshInterval)
+//            }
+//        }
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        startAutoUpdate()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
             && !PermissionX.isGranted(this, android.Manifest.permission.POST_NOTIFICATIONS)) {
@@ -49,6 +61,9 @@ class MainActivity : AppCompatActivity() {
             startForegroundService(intent)
         }
 
+        binding.toolbar.title = title
+        setSupportActionBar(binding.toolbar)
+
         setupBottomNavigation()
         if (savedInstanceState == null) {
             // 默认加载DailyFragment
@@ -57,6 +72,38 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
     }
+//    private fun startAutoUpdate() {
+//        refreshHandler.postDelayed(updateRunnable, refreshInterval)
+//    }
+//
+//    private fun stopAutoUpdate() {
+//        refreshHandler.removeCallbacks(updateRunnable)
+//    }
+//
+//    fun updateAllFragments() {
+//        supportFragmentManager.fragments.forEach { fragment ->
+//            when (fragment) {
+//                is DailyFragment -> fragment.updateRecyclerView()
+//                is NotifyListFragment -> fragment.updateRecyclerView()
+//            }
+//        }
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        stopAutoUpdate() // 暂停时停止更新
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        startAutoUpdate() // 恢复时重新开始更新
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        stopAutoUpdate() // 销毁时确保停止
+//    }
+
 
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
@@ -86,18 +133,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-//    private val refreshRunnable = object : Runnable {
-//        override fun run() {
-//            // 获取最新数据并更新 Adapter
-//            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0,app.notifyNotifyModels.findAll().size)
-//            // 再次延迟执行（实现循环）
-//            refreshHandler.postDelayed(this, refreshInterval)
-//        }
-//    }
-//
-//    private fun startAutoRefresh() {
-//        refreshHandler.postDelayed(refreshRunnable, refreshInterval)
-//    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_add, menu)
@@ -105,20 +140,21 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when(item.itemId){
-//            R.id.item_add -> {
-//                val launchIntent = Intent(this, PageMainActivity::class.java)
-//                getResult.launch(launchIntent)            }
-//        }
-//        when(item.itemId){
-//            R.id.item_setting -> {
-//                requestPermission()
-//                return true
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.item_add -> {
+                val launchIntent = Intent(this, PageMainActivity::class.java)
+                startActivity(launchIntent)
+            }
+        }
+        when(item.itemId){
+            R.id.item_setting -> {
+                requestPermission()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     /**
      * 请求通知监听权限
@@ -141,16 +177,16 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == REQUEST_CODE) {
-//            if (notifyService.isNLServiceEnabled()) {
-//                showMsg("通知服务已开启")
-//                notifyService.toggleNotificationListenerService(true)
-//            } else {
-//                showMsg("通知服务未开启")
-//                notifyService.toggleNotificationListenerService(false)
-//            }
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            if (notifyService.isNLServiceEnabled()) {
+                showMsg("通知服务已开启")
+                notifyService.toggleNotificationListenerService(true)
+            } else {
+                showMsg("通知服务未开启")
+                notifyService.toggleNotificationListenerService(false)
+            }
+        }
+    }
 }

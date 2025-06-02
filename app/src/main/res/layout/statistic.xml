@@ -20,9 +20,10 @@
 
             <!-- 标题 -->
             <TextView
+                android:id="@+id/titleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="消费统计"
+                android:text=""
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
@@ -32,7 +33,7 @@
                 android:id="@+id/emptyText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="本月暂无消费记录"
+                android:text="@string/empty_title"
                 android:textSize="16sp"
                 android:gravity="center"
                 android:visibility="gone"

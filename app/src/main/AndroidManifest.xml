@@ -40,10 +40,10 @@
 <!--            <meta-data android:name="android.app.lib_name"-->
 <!--                android:value="" />-->
 <!--        </activity>-->
-<!--        <activity android:name=".activity.PageMainActivity">-->
-<!--            <meta-data android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
-<!--        </activity>-->
+        <activity android:name=".activity.PageMainActivity">
+            <meta-data android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 <!--        <activity android:name=".activity.statisticActivity"-->
 <!--            android:exported="true">-->
 <!--        </activity>-->

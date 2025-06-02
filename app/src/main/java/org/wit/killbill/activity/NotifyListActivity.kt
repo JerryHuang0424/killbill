@@ -3,6 +3,8 @@ package org.wit.killbill.fragment
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -28,6 +30,9 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
             return NotifyListFragment()
         }
     }
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var refreshRunnable: Runnable
+    private val refreshInterval = 1000L // 1秒
     private var _binding: ActivityListMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var app: MainApp
@@ -45,17 +50,45 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        app = requireActivity().application as MainApp
+        refreshRunnable = object : Runnable {
+            override fun run() {
+                updateRecyclerView()
+                handler.postDelayed(this, refreshInterval) // 循环执行
+            }
+        }
 
-        // 设置Toolbar
-        binding.toolbar.title = "账单列表"
-        (requireActivity() as? AppCompatActivity)?.setSupportActionBar(binding.toolbar)
-        setHasOptionsMenu(true)
+        startAutoRefresh()
+        app = requireActivity().application as MainApp
 
         // 初始化RecyclerView
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
+    }
+
+    private fun startAutoRefresh() {
+        handler.postDelayed(refreshRunnable, refreshInterval)
+    }
+
+    private fun stopAutoRefresh() {
+        handler.removeCallbacks(refreshRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stopAutoRefresh()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startAutoRefresh()
+    }
+
+
+
+    fun updateRecyclerView(){
+        binding.recyclerView.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
+
     }
 
     @Deprecated("Deprecated in Java")
@@ -105,6 +138,7 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stopAutoRefresh()
         _binding = null
     }
 }

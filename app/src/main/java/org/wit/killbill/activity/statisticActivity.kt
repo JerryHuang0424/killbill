@@ -54,6 +54,8 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
 
         app = requireActivity().application as MainApp
 
+
+
         // 设置特定的时间，筛选全部账单中符合时间规定
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -79,6 +81,8 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
                 }
             }
         }
+
+        _binding?.titleText?.setText("${currentMonth}月的消费统计")
 
         val mergedEntries = pieChartList
             .groupBy { it.label }
