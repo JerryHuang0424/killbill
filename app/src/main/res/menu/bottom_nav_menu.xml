@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- 账单 -->
     <item
         android:id="@+id/navigation_today"
         android:icon="@android:drawable/ic_menu_today"
-        android:title="@string/Bill_button" />
+        android:title="@string/Bill_button"
+        app:iconTint="@drawable/nav_item_color_state"
+        app:itemTextColor="@drawable/nav_item_color_state"/>
 
+    <!-- 统计 -->
     <item
         android:id="@+id/navigation_stats"
         android:icon="@android:drawable/ic_menu_agenda"
-        android:title="@string/Statistic_button" />
+        android:title="@string/Statistic_button"
+        app:iconTint="@drawable/nav_item_color_state"
+        app:itemTextColor="@drawable/nav_item_color_state"/>
 
+    <!-- 设置 -->
     <item
         android:id="@+id/navigation_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
-        android:title="@string/Setting_button" />
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/Setting_button"
+        app:iconTint="@drawable/nav_item_color_state"
+        app:itemTextColor="@drawable/nav_item_color_state"/>
+
 </menu>

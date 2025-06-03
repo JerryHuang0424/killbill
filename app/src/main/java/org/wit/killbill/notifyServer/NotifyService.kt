@@ -10,17 +10,6 @@ import org.wit.killbill.models.NotifyHelper
 
 class NotifyService : NotificationListenerService() {
 
-    companion object {
-        public const val TAG = "NotifyService"
-
-        // 定义常用应用包名常量
-        public const val QQ = "com.tencent.mobileqq"          // QQ
-        public const val WX = "com.tencent.mm"                // 微信
-        public const val HONOR_MMS= "com.hihonor.mms";        //荣耀短信
-        public const val Alipay="com.eg.android.AlipayGphone" //支付宝
-
-    }
-
     /**
      * 当通知发布时调用
      * @param sbn 状态栏通知对象
@@ -28,22 +17,6 @@ class NotifyService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         NotifyHelper.getInstance().onReceive(sbn)
     }
-
-    /**
-     * 当通知被移除时调用
-     * @param sbn 状态栏通知对象
-     */
-//    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
-//        sbn?.let { notification ->
-//            when (notification.packageName) {
-//                HONOR_MMS -> Log.d(TAG, "移除短信")
-//                QQ -> Log.d(TAG, "移除QQ消息")
-//                WX -> Log.d(TAG, "移除微信消息")
-//                Alipay -> Log.d(TAG, "移除支付宝消息")
-//            }
-//        }
-//    }
-
     /**
      * 当监听服务断开连接时调用
      */

@@ -3,27 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFF5F5F5">
 
     <!-- 主要内容区域 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_above="@id/bottom_navigation">
+        android:orientation="vertical">
 
-        <!-- 顶部工具栏 -->
+        <!-- 橙色顶部工具栏 -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:elevation="0dp">
+            android:background="@color/orange_primary"
+            app:elevation="4dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorPrimary" />
+                android:background="@color/orange_primary"
+                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                app:titleTextColor="@android:color/white"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- 使用ScrollView包裹内容区域 -->
@@ -31,31 +33,39 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="16dp">
 
                 <!-- GridLayout -->
                 <GridLayout
                     android:id="@+id/gridLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:columnCount="4">
+                    android:columnCount="4"
+                    android:layout_marginBottom="16dp">
 
                     <!-- 子元素内容 -->
                 </GridLayout>
 
-                <!-- 标题输入 -->
+                <!-- 标题输入 - 橙色主题 -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="@string/Add_card_title_hint">
+                    android:hint="@string/Add_card_title_hint"
+                    app:boxStrokeColor="@color/orange_primary"
+                    app:hintTextColor="@color/orange_primary"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTitle"
@@ -64,16 +74,22 @@
                         android:ellipsize="end"
                         android:inputType="textCapSentences"
                         android:maxLines="1"
-                        android:text="" />
+                        android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- 内容输入 -->
+                <!-- 内容输入 - 橙色主题 -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="@string/Add_card_context_hint">
+                    android:hint="@string/Add_card_context_hint"
+                    app:boxStrokeColor="@color/orange_primary"
+                    app:hintTextColor="@color/orange_primary"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etContent"
@@ -82,16 +98,22 @@
                         android:gravity="top"
                         android:inputType="textMultiLine"
                         android:maxLines="5"
-                        android:text="" />
+                        android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- 时间输入 -->
+                <!-- 时间输入 - 橙色主题 -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:hint="@string/Add_card_time_hint">
+                    android:hint="@string/Add_card_time_hint"
+                    app:boxStrokeColor="@color/orange_primary"
+                    app:hintTextColor="@color/orange_primary"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusBottomEnd="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etTime"
@@ -101,33 +123,34 @@
                         android:focusable="false"
                         android:inputType="none"
                         android:singleLine="true"
-                        android:text=""
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- 提交按钮 -->
+                <!-- 提交按钮 - 橙色主题 -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSubmit"
                     style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginBottom="8dp"
-                    android:backgroundTint="@color/teal_700"
+                    android:backgroundTint="@color/orange_primary"
                     android:text="@string/Add_card"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="8dp"/>
 
-                <!-- 删除按钮 -->
+                <!-- 删除按钮 - 橙色浅色变体 -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDelete"
-                    style="@style/Widget.MaterialComponents.Button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:backgroundTint="@color/teal_700"
                     android:text="@string/Delete_card"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@color/orange_primary"
+                    app:strokeColor="@color/orange_primary"
+                    app:strokeWidth="1dp"
+                    app:cornerRadius="8dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

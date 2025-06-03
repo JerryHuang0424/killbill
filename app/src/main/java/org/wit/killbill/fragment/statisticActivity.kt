@@ -19,7 +19,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import org.wit.killbill.R
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener

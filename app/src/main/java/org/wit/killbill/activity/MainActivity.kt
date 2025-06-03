@@ -3,12 +3,9 @@ package org.wit.killbill.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
@@ -23,9 +20,6 @@ import org.wit.killbill.notifyServer.NotifyService
 
 
 class MainActivity : AppCompatActivity() {
-    private val handler = Handler(Looper.getMainLooper())
-    private lateinit var refreshRunnable: Runnable
-    private val refreshInterval = 1000L // 1秒
     private lateinit var binding: MainActivityBinding
     private lateinit var notifyService: NotifyService
     companion object {
@@ -35,16 +29,9 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        updateRunnable = object : Runnable {
-//            override fun run() {
-//                updateAllFragments()
-//                refreshHandler.postDelayed(this, refreshInterval)
-//            }
-//        }
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        startAutoUpdate()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
             && !PermissionX.isGranted(this, android.Manifest.permission.POST_NOTIFICATIONS)) {
@@ -72,37 +59,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
     }
-//    private fun startAutoUpdate() {
-//        refreshHandler.postDelayed(updateRunnable, refreshInterval)
-//    }
-//
-//    private fun stopAutoUpdate() {
-//        refreshHandler.removeCallbacks(updateRunnable)
-//    }
-//
-//    fun updateAllFragments() {
-//        supportFragmentManager.fragments.forEach { fragment ->
-//            when (fragment) {
-//                is DailyFragment -> fragment.updateRecyclerView()
-//                is NotifyListFragment -> fragment.updateRecyclerView()
-//            }
-//        }
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        stopAutoUpdate() // 暂停时停止更新
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        startAutoUpdate() // 恢复时重新开始更新
-//    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        stopAutoUpdate() // 销毁时确保停止
-//    }
+
 
 
     private fun setupBottomNavigation() {

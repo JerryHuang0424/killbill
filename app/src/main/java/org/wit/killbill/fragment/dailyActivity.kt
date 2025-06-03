@@ -29,7 +29,6 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
         }
     }
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var refreshRunnable: Runnable
     private val refreshInterval = 1000L // 1秒
     private var _binding: DailyStatusBinding? = null
     private val binding get() = _binding!!
@@ -50,25 +49,10 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        refreshRunnable = object : Runnable {
-            override fun run() {
-                updateRecyclerView()
-                handler.postDelayed(this, refreshInterval) // 循环执行
-            }
-        }
-
-        startAutoRefresh()
 
         app = requireActivity().application as MainApp
 
-        refreshRunnable = object : Runnable {
-            override fun run() {
-                updateRecyclerView() // 刷新数据
-                handler.postDelayed(this, refreshInterval) // 循环执行
-            }
-        }
-
-        startAutoRefresh()
+//        startAutoRefresh()
         // 设置特定的时间，筛选全部账单中符合时间规定
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
@@ -102,28 +86,29 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
         binding.rvBillList.adapter = NotifyAdapter(currentList, this)
     }
 
-    private fun startAutoRefresh() {
-        handler.postDelayed(refreshRunnable, refreshInterval)
-    }
+//    private val refreshRunnable = object : Runnable {
+//        override fun run() {
+//            // 获取最新数据并更新 Adapter
+//            updateRecyclerView()
+//            // 再次延迟执行（实现循环）
+//            handler.postDelayed(this, refreshInterval)
+//        }
+//    }
+//
+//    private fun startAutoRefresh() {
+//        handler.postDelayed(refreshRunnable, refreshInterval)
+//    }
 
-    private fun stopAutoRefresh() {
-        handler.removeCallbacks(refreshRunnable)
-    }
 
-    override fun onPause() {
-        super.onPause()
-        stopAutoRefresh()
-    }
 
-    override fun onResume() {
-        super.onResume()
-        startAutoRefresh()
-    }
+//    private fun updateRecyclerView() {
+//        try {
+//            binding.rvBillList.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
+//        } catch (e: Exception) {
+//            // 处理异常
+//        }
+//    }
 
-    fun updateRecyclerView(){
-        binding.rvBillList.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
-
-    }
 
     override fun onCardClick(notify: NotifyModel, pos: Int) {
         val launchIntentCard = Intent(requireContext(), PageMainActivity::class.java)
@@ -143,7 +128,7 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        stopAutoRefresh()
+//        stopAutoRefresh()
         _binding = null
     }
 }

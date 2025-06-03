@@ -15,8 +15,8 @@
     <string name="Setting_button">Setting</string>
     <string name="Add_card_context">This is the detailed content…</string>
     <string name="Add_card_time_hint">Time</string>
-    <string name="Add_card_title_hint">Title</string>
-    <string name="Add_card_context_hint">Content</string>
+    <string name="Add_card_title_hint">金额</string>
+    <string name="Add_card_context_hint">备注</string>
     <string name="pie_chart_title">支出分类占比</string>
     <string name="legend_title">图例说明</string>
     <string name="statistic_title">Cost statistic</string>
