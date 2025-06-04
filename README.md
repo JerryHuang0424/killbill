@@ -2,7 +2,7 @@
 
 院校：NUIST & SETU
 
-作者：黄家睿(JerryHuang0424)、金垲峰([00HelloKing](https://github.com/00HelloKing))、郭玮晨(fiber1)
+作者：黄家睿([JerryHuang0424](https://github.com/JerryHuang0424))、金垲峰([00HelloKing](https://github.com/00HelloKing))、郭玮晨([fiber1](https://github.com/f1ber1))
 
 ## 一、核心功能概述
 1. **当日账单聚合展示**  
