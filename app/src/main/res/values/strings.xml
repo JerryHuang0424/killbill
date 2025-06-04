@@ -1,4 +1,24 @@
 <resources>
     <string name="app_name">killbill</string>
     <string name="Allow_Permissions">Allow Listening Permissions</string>
+    <string name="Add_Bill">Adding</string>
+    <string name="Set_for_app">Setting</string>
+    <string name="menu_cancal">Cancel</string>
+    <string name="save_card"> Save</string>
+    <string name="Add_card">Adding</string>
+    <string name="Delete_card">Delete</string>
+    <string name="notification_title">KillBill Auto-Accounting</string>
+    <string name="notification_message">Processing your transactions automatically…</string>
+    <string name="notification_status">Working in the background</string>
+    <string name="Bill_button">Bill</string>
+    <string name="Statistic_button">Statistic</string>
+    <string name="Setting_button">List</string>
+    <string name="Add_card_context">This is the detailed content…</string>
+    <string name="Add_card_time_hint">Time</string>
+    <string name="Add_card_title_hint">金额</string>
+    <string name="Add_card_context_hint">备注</string>
+    <string name="pie_chart_title">支出分类占比</string>
+    <string name="legend_title">图例说明</string>
+    <string name="statistic_title">Cost statistic</string>
+    <string name="empty_title">本月暂无消费记录</string>
 </resources>

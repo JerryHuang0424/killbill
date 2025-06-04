@@ -7,5 +7,14 @@
     <color name="colorAccent">#026E8E</color>
     <color name="teal_700">#018786</color>
     <color name="gray_600">#757575</color>
-
+    <color name="orange">#FFFF5722</color>
+    <color name="dark_orange">#FFE64A19</color>
+    <color name="light_background">#FFF8F8F8</color>
+    <color name="text_primary">#E0000000</color>  <!-- 87% 黑 -->
+    <color name="text_secondary">#8A000000</color> <!-- 54% 黑 -->
+    <color name="text_hint">#61000000</color>     <!-- 38% 黑 -->
+    <color name="background_light">#FFF5F5F5</color>
+    <color name="orange_primary">#FF5722</color>  <!-- 主橙色 -->
+    <color name="orange_dark">#BF360C</color>    <!-- 深橙色，对比度达标 -->
+    <color name="orange_light">#FFCCBC</color>    <!-- 浅橙色，仅用于背景 -->
 </resources>
