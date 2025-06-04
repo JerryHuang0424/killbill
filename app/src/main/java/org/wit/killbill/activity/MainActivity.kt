@@ -126,7 +126,7 @@ class MainActivity : AppCompatActivity() {
 
         // 方法2：检查并提示用户手动开启（可选）
         if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
-            Toast.makeText(this, "请找到本应用并开启通知监听权限", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please locate this app and enable notification listening permission", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -138,10 +138,10 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
             if (notifyService.isNLServiceEnabled()) {
-                showMsg("通知服务已开启")
+                showMsg("Notification Service Activated")
                 notifyService.toggleNotificationListenerService(true)
             } else {
-                showMsg("通知服务未开启")
+                showMsg("Notification Service Not Activated")
                 notifyService.toggleNotificationListenerService(false)
             }
         }

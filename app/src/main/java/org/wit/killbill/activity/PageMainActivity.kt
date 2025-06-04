@@ -46,7 +46,7 @@ class PageMainActivity : AppCompatActivity(){
 
         app = application as MainApp
 
-        val categories = arrayOf("餐饮", "日用", "交通", "学习", "教育", "医疗", "娱乐", "购物")
+        val categories = arrayOf("Catering", "Daily use", "Transportation", "Learning", "Education", "Medical", "Entertainment", "Shopping")
 
         setupButtons(categories)
 

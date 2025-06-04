@@ -81,7 +81,7 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
             }
         }
 
-        _binding?.titleText?.setText("${currentMonth}月的消费统计")
+        _binding?.titleText?.setText("Consumption statistics for${currentMonth}")
 
         val mergedEntries = pieChartList
             .groupBy { it.label }
@@ -124,7 +124,7 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
         if (entries.isEmpty()) {
             pieChart.visibility = View.GONE
             binding.emptyText.visibility = View.VISIBLE
-            binding.emptyText.text = "本月暂无消费记录"
+            binding.emptyText.text = "NO Consumption Records for this Month"
             return
         }
 

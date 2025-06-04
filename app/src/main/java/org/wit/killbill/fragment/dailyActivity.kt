@@ -78,36 +78,13 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
             }
         }
 
-        binding.tvDate.text = "${currentYear}年${currentMonth}月${currentDay}日"
+        binding.tvDate.text = "${currentYear} / ${currentMonth} / ${currentDay}"
         binding.tvTotalAmount.text = currentList.sumOf { it.amount }.toString()
 
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvBillList.layoutManager = layoutManager
         binding.rvBillList.adapter = NotifyAdapter(currentList, this)
     }
-
-//    private val refreshRunnable = object : Runnable {
-//        override fun run() {
-//            // 获取最新数据并更新 Adapter
-//            updateRecyclerView()
-//            // 再次延迟执行（实现循环）
-//            handler.postDelayed(this, refreshInterval)
-//        }
-//    }
-//
-//    private fun startAutoRefresh() {
-//        handler.postDelayed(refreshRunnable, refreshInterval)
-//    }
-
-
-
-//    private fun updateRecyclerView() {
-//        try {
-//            binding.rvBillList.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
-//        } catch (e: Exception) {
-//            // 处理异常
-//        }
-//    }
 
 
     override fun onCardClick(notify: NotifyModel, pos: Int) {

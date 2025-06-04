@@ -47,14 +47,7 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        refreshRunnable = object : Runnable {
-//            override fun run() {
-//                updateRecyclerView()
-//                handler.postDelayed(this, refreshInterval) // 循环执行
-//            }
-//        }
-//
-//        startAutoRefresh()
+
         app = requireActivity().application as MainApp
 
         // 初始化RecyclerView
@@ -62,24 +55,6 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
     }
-
-//    private fun startAutoRefresh() {
-//        handler.postDelayed(refreshRunnable, refreshInterval)
-//    }
-//
-//    private fun stopAutoRefresh() {
-//        handler.removeCallbacks(refreshRunnable)
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        stopAutoRefresh()
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        startAutoRefresh()
-//    }
 
 
     fun updateRecyclerView(){
