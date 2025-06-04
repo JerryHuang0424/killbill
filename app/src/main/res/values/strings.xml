@@ -12,7 +12,7 @@
     <string name="notification_status">Working in the background</string>
     <string name="Bill_button">Bill</string>
     <string name="Statistic_button">Statistic</string>
-    <string name="Setting_button">Setting</string>
+    <string name="Setting_button">List</string>
     <string name="Add_card_context">This is the detailed content…</string>
     <string name="Add_card_time_hint">Time</string>
     <string name="Add_card_title_hint">金额</string>
