@@ -1,5 +1,7 @@
 package org.wit.killbill.activity
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import com.permissionx.guolindev.PermissionX
+import org.wit.killbill.LanguageManager.LanguageManager
 import org.wit.killbill.R
 import org.wit.killbill.backGroundService.BackGroundService
 import org.wit.killbill.databinding.MainActivityBinding
@@ -147,3 +150,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+
+// 语言切换
+open class BaseActivity : AppCompatActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        // 加载保存的语言
+        val language = LanguageManager.getCurrentLanguage(newBase)
+        val context = ContextWrapper(newBase).apply {
+            LanguageManager.setLocale(this, language)
+        }
+        super.attachBaseContext(context)
+    }
+}
+

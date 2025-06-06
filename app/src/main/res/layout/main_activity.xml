@@ -12,6 +12,12 @@
         app:elevation="4dp"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+        <!-- 语言切换 -->
+        <Spinner
+            android:id="@+id/languageSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

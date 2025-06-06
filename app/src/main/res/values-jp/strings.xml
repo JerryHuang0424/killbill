@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">KillBill</string>
+    <string name="Allow_Permissions">リスニング許可を許可する</string>
+    <string name="Add_Bill">追加</string>
+    <string name="Set_for_app">Setting</string>
+    <string name="menu_cancal">設定</string>
+    <string name="save_card">保存する</string>
+    <string name="Add_card">追加</string>
+    <string name="Delete_card">削除する</string>
+    <string name="notification_title">KillBill自動会計</string>
+    <string name="notification_message">取引を自動的に処理する…</string>
+    <string name="notification_status">背景で働く</string>
+    <string name="Bill_button">Bill</string>
+    <string name="Statistic_button">統計</string>
+    <string name="Setting_button">設定</string>
+    <string name="Add_card_context">これが詳細な内容…</string>
+    <string name="Add_card_time_hint">時間</string>
+    <string name="Add_card_title_hint">金額</string>
+    <string name="Add_card_context_hint">ノート</string>
+    <string name="pie_chart_title">支出カテゴリー</string>
+    <string name="legend_title">説明</string>
+    <string name="statistic_title">コスト統計</string>
+    <string name="empty_title">今月の消費記録はない</string>
+</resources>
