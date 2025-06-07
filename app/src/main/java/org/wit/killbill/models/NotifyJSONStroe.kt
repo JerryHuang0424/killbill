@@ -35,19 +35,19 @@ class NotifyJSONStroeJSONStore(private val context: Context) : NotifyStore {
 
     override fun createByMenu(notify: NotifyModel) {
         notify.id = generateRandomId()
-        notifies.add(0,notify)
+        notifies.add(0, notify)
         serialize()
     }
 
     override fun createByListener(notify: NotifyModel) {
         notify.id = getId()
         notifies.add(0, notify)
-        logAll()    }
-
+        logAll()
+    }
 
     override fun update(notify: NotifyModel) {
-        val foundNotify: NotifyModel? = notifies.find{ p -> p.id ==notify.id}
-        if(foundNotify!= null){
+        val foundNotify: NotifyModel? = notifies.find { p -> p.id == notify.id }
+        if (foundNotify != null) {
             foundNotify.amount = notify.amount
             foundNotify.context = notify.context
             foundNotify.time = notify.time

@@ -8,20 +8,20 @@
     android:background="@color/light_background"
     tools:context="org.wit.killbill.activity.NotifyListActivity">
 
-    <!-- 主要内容区域 -->
+    <!-- Main content area -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/light_background">
 
-        <!-- 顶部橙色装饰带（更现代的设计） -->
+        <!-- Top orange decorative strip -->
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:background="@drawable/recycler_bg"/>
 
-        <!-- 美化后的RecyclerView -->
+        <!-- Beautified RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"

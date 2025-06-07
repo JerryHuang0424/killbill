@@ -19,10 +19,10 @@ import java.util.Locale
 import java.util.TimeZone
 
 
-class PageMainActivity : AppCompatActivity(){
+class PageMainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var notifyModel = NotifyModel()
-    lateinit var app : MainApp
+    lateinit var app: MainApp
     private var edit = false
     private val mshelper: messageHelper = messageHelper()
     private lateinit var gridLayout: GridLayout
@@ -46,19 +46,28 @@ class PageMainActivity : AppCompatActivity(){
 
         app = application as MainApp
 
-        val categories = arrayOf("Catering", "Daily use", "Transportation", "Learning", "Education", "Medical", "Entertainment", "Shopping")
+        val categories = arrayOf(
+            "Catering",
+            "Daily use",
+            "Transportation",
+            "Learning",
+            "Education",
+            "Medical",
+            "Entertainment",
+            "Shopping"
+        )
 
         setupButtons(categories)
 
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINESE).apply {
-            timeZone = TimeZone.getDefault()  // 使用设备当前时区
+            timeZone = TimeZone.getDefault()  // Using the current time zone of the device
         }
         val currentTime = Calendar.getInstance().time
         binding.etTime.setText(sdf.format(currentTime))
 
 
 
-        if(intent.hasExtra("Notify_edit")){
+        if (intent.hasExtra("Notify_edit")) {
             edit = true
             notifyModel = intent.extras?.getParcelable("Notify_edit")!!
             binding.etTitle.setText(notifyModel.amount.toString())
@@ -67,7 +76,7 @@ class PageMainActivity : AppCompatActivity(){
             binding.btnSubmit.setText(R.string.save_card)
         }
 
-        if(intent.hasExtra("NOTIFICATION_DATA")){
+        if (intent.hasExtra("NOTIFICATION_DATA")) {
             notifyModel = intent.extras?.getParcelable("NOTIFICATION_DATA")!!
             binding.etTitle.setText(notifyModel.amount.toString())
             binding.etContent.setText(mshelper.dealMessage(notifyModel.context))
@@ -75,7 +84,7 @@ class PageMainActivity : AppCompatActivity(){
 
         }
 
-        binding.btnDelete.setOnClickListener(){
+        binding.btnDelete.setOnClickListener() {
             setResult(99)
             app.notifyNotifyModels.delete(notifyModel)
             finish()
@@ -83,23 +92,23 @@ class PageMainActivity : AppCompatActivity(){
 
         binding.btnSubmit.setOnClickListener() {
             var money_amount = binding.etTitle.text.toString()
-            // 步骤1：转换为浮点数（若输入是整数如"158"，会自动补.0）
+            // Step 1: Convert to floating point number
+            // (if the input is an integer such as "158", it will automatically add. 0)
             val amount = money_amount.toDoubleOrNull() ?: 0.0
-            // 步骤2：四舍五入到小数点后两位
+            // Step 2: Round to two decimal places
             val roundedAmount = "%.2f".format(amount).toDouble()
-            notifyModel.amount  = roundedAmount
+            notifyModel.amount = roundedAmount
             notifyModel.context = binding.etContent.text.toString()
 
             notifyModel.time = binding.etTime.text.toString()
-            if(binding.etTitle.text?.isEmpty() ?: true){
-                Snackbar.make(it,"Please Enter a title", Snackbar.LENGTH_LONG).show()
+            if (binding.etTitle.text?.isEmpty() ?: true) {
+                Snackbar.make(it, "Please Enter a title", Snackbar.LENGTH_LONG).show()
 
-            }
-            else{
-                if(edit){
+            } else {
+                if (edit) {
                     app.notifyNotifyModels.update(notifyModel)
 
-                }else{
+                } else {
                     app.notifyNotifyModels.createByMenu(notifyModel)
                 }
 //                setResult(RESULT_OK)
@@ -116,7 +125,7 @@ class PageMainActivity : AppCompatActivity(){
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.item_cancel -> {
                 finish()
             }
@@ -153,6 +162,6 @@ class PageMainActivity : AppCompatActivity(){
         selectedButton = button
     }
 
-    // dp转px扩展函数
+    // dp to px extension function
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
 }

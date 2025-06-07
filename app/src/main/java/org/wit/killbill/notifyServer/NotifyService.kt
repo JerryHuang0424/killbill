@@ -11,25 +11,26 @@ import org.wit.killbill.models.NotifyHelper
 class NotifyService : NotificationListenerService() {
 
     /**
-     * 当通知发布时调用
-     * @param sbn 状态栏通知对象
+     * Call when notification is published
+     * @param sbn Status bar notification object
      */
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         NotifyHelper.getInstance().onReceive(sbn)
     }
+
     /**
-     * 当监听服务断开连接时调用
+     * Call when the listening service disconnects
      */
     override fun onListenerDisconnected() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // 请求重新绑定服务
+            // Request to rebind service
             requestRebind(ComponentName(this, NotificationListenerService::class.java))
         }
     }
 
     /**
-     * 是否启用通知监听服务
-     * @return Boolean 是否启用
+     * Do you want to enable notification listening service
+     * Is @return Boolean enabled
      */
     fun isNLServiceEnabled(): Boolean {
         val packageNames = NotificationManagerCompat.getEnabledListenerPackages(this)
@@ -37,7 +38,7 @@ class NotifyService : NotificationListenerService() {
     }
 
     /**
-     * 切换通知监听器服务
+     * Switch notification listener service
      */
     fun toggleNotificationListenerService(enable: Boolean) {
         val pm = packageManager

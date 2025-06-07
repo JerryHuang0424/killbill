@@ -1,5 +1,9 @@
 package org.wit.killbill.LanguageManager
 
+import android.content.Context
+import android.content.res.Configuration
+import java.util.Locale
+
 // LanguageManager.kt
 object LanguageManager {
     fun setLocale(context: Context, languageCode: String) {
@@ -9,7 +13,7 @@ object LanguageManager {
         config.setLocale(locale)
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
 
-        // 保存语言选择到SharedPreferences
+        // keep language to SharedPreferences
         val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
         prefs.edit().putString("language", languageCode).apply()
     }

@@ -22,14 +22,12 @@ import org.wit.killbill.models.NotifyModel
 
 class NotifyListFragment : Fragment(), NotifyAdapterListener {
     companion object {
-        // 添加 newInstance 方法
+        // add newInstance() method
         fun newInstance(): NotifyListFragment {
             return NotifyListFragment()
         }
     }
-//    private val handler = Handler(Looper.getMainLooper())
-//    private lateinit var refreshRunnable: Runnable
-//    private val refreshInterval = 1000L // 1秒
+
     private var _binding: ActivityListMainBinding? = null
     private val binding get() = _binding!!
     private lateinit var app: MainApp
@@ -47,15 +45,13 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         app = requireActivity().application as MainApp
 
-        // 初始化RecyclerView
+        // initialize RecyclerView
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(app.notifyNotifyModels.findAll(), this)
     }
-
 
     fun updateRecyclerView(){
         binding.recyclerView.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
@@ -78,7 +74,7 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
                 return true
             }
             R.id.item_setting -> {
-                // 处理设置菜单项
+                // deal with setting menu
                 return true
             }
         }
@@ -109,7 +105,6 @@ class NotifyListFragment : Fragment(), NotifyAdapterListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        stopAutoRefresh()
         _binding = null
     }
 }
