@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.charts.PieChart
 import org.wit.killbill.R
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
@@ -27,6 +28,7 @@ import org.wit.killbill.databinding.StatisticBinding
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.models.NotifyModel
 import java.util.Calendar
+
 
 class StatisticFragment : Fragment(), NotifyAdapterListener {
     companion object {
@@ -71,12 +73,14 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
                 val modelMonth = dateParts[1].toInt()
 
                 if (modelYear == currentYear && modelMonth == currentMonth) {
+                    val label = if (notifyModel.type.isBlank()) getString(R.string.Else) else notifyModel.type
                     pieChartList.add(
                         PieEntry(
                             notifyModel.amount.toFloat(),
-                            if (notifyModel.type.isBlank()) R.string.Else else notifyModel.type
+                            label
                         )
                     )
+
                     currentList.add(notifyModel)
                 }
             }
@@ -132,7 +136,7 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
         if (entries.isEmpty()) {
             pieChart.visibility = View.GONE
             binding.emptyText.visibility = View.VISIBLE
-            binding.emptyText.text = "No Consumption Records for this Month"
+            binding.emptyText.text = getString(R.string.emptyAccount)
             return
         }
 
@@ -162,6 +166,7 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
             data = pieData
             description.isEnabled = false
             isDrawHoleEnabled = true
+            setUsePercentValues(true)
             holeRadius = 40f
             transparentCircleRadius = 45f
             setEntryLabelColor(Color.BLACK)
@@ -171,6 +176,9 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
             invalidate()
         }
     }
+
+
+
 
     private fun setupLegend(entries: List<PieEntry>) {
         val legendContainer = binding.legendContainer
