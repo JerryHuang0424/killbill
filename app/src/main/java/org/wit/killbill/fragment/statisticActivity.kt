@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import org.wit.killbill.R
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
@@ -73,7 +74,7 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
                     pieChartList.add(
                         PieEntry(
                             notifyModel.amount.toFloat(),
-                            if (notifyModel.type.isBlank()) "其他" else notifyModel.type
+                            if (notifyModel.type.isBlank()) R.string.Else else notifyModel.type
                         )
                     )
                     currentList.add(notifyModel)
@@ -81,7 +82,10 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
             }
         }
 
-        _binding?.titleText?.setText("Consumption statistics for${currentMonth}")
+//        _binding?.titleText?.setText("Consumption statistics for ${currentMonth} month")
+        val title = getString(R.string.consumption_statistics, currentMonth)
+        _binding?.titleText?.text = title
+
 
         val mergedEntries = pieChartList
             .groupBy { it.label }
@@ -128,7 +132,7 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
         if (entries.isEmpty()) {
             pieChart.visibility = View.GONE
             binding.emptyText.visibility = View.VISIBLE
-            binding.emptyText.text = "NO Consumption Records for this Month"
+            binding.emptyText.text = "No Consumption Records for this Month"
             return
         }
 

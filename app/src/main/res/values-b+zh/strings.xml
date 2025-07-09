@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">killbill</string>
+    <string name="Allow_Permissions">允许监听权限</string>
+    <string name="Add_Bill">添加</string>
+    <string name="Set_for_app">设置</string>
+    <string name="menu_cancal">取消</string>
+    <string name="save_card">保存</string>
+    <string name="Add_card">添加</string>
+    <string name="Delete_card">删除</string>
+    <string name="notification_title">KillBill自动记账</string>
+    <string name="notification_message">正在自动处理您的交易</string>
+    <string name="notification_status">正在后台允许</string>
+    <string name="Bill_button">账单</string>
+    <string name="Statistic_button">统计</string>
+    <string name="Setting_button">列表</string>
+    <string name="Add_card_context">这是一个处理过的账单</string>
+    <string name="Add_card_time_hint">时间</string>
+    <string name="Add_card_title_hint">交易总额</string>
+    <string name="Add_card_context_hint">笔记</string>
+    <string name="pie_chart_title">支出类别</string>
+    <string name="legend_title">备注</string>
+    <string name="statistic_title">支出统计</string>
+    <string name="empty_title">本月没有消费记录</string>
+    <string name="change_language">更改语言</string>
+    <string name="consumption_statistics">%1$s 月的消费统计</string>
+    <string name="catering">餐饮</string>
+    <string name="dailyuse">日用</string>
+    <string name="transportation">出行</string>
+    <string name="learning">学习</string>
+    <string name="education">教育</string>
+    <string name="medical">医疗</string>
+    <string name="entertainment">娱乐</string>
+    <string name="shopping">购物</string>
+    <string name="Else">其他</string>
+    <string name="emptyAccount">本月还未产生账单</string>
+
+
+</resources>

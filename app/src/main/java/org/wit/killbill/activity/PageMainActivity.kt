@@ -47,14 +47,14 @@ class PageMainActivity : AppCompatActivity() {
         app = application as MainApp
 
         val categories = arrayOf(
-            "Catering",
-            "Daily use",
-            "Transportation",
-            "Learning",
-            "Education",
-            "Medical",
-            "Entertainment",
-            "Shopping"
+            getString(R.string.catering),
+            getString(R.string.dailyuse),
+            getString(R.string.transportation),
+            getString(R.string.learning),
+            getString(R.string.education),
+            getString(R.string.medical),
+            getString(R.string.entertainment),
+            getString(R.string.shopping)
         )
 
         setupButtons(categories)

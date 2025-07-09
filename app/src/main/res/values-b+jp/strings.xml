@@ -21,4 +21,17 @@
     <string name="legend_title">説明</string>
     <string name="statistic_title">コスト統計</string>
     <string name="empty_title">今月の消費記録はない</string>
+    <string name="change_language">ランゲージ変更</string>
+    <string name="consumption_statistics">%1$s 月の消費記録</string>
+    <string name="catering">外食</string>
+    <string name="dailyuse">日用品</string>
+    <string name="transportation">交通</string>
+    <string name="learning">学習</string>
+    <string name="education">教育</string>
+    <string name="medical">医療</string>
+    <string name="entertainment">娯楽</string>
+    <string name="shopping">買い物</string>
+    <string name="Else">その他</string>
+    <string name="emptyAccount">今月の消費記録はありません</string>
+
 </resources>

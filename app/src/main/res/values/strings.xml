@@ -4,7 +4,7 @@
     <string name="Add_Bill">Adding</string>
     <string name="Set_for_app">Setting</string>
     <string name="menu_cancal">Cancel</string>
-    <string name="save_card"> Save</string>
+    <string name="save_card">Save</string>
     <string name="Add_card">Adding</string>
     <string name="Delete_card">Delete</string>
     <string name="notification_title">KillBill Auto-Accounting</string>
@@ -21,4 +21,17 @@
     <string name="legend_title">Explanation</string>
     <string name="statistic_title">Cost Statistic</string>
     <string name="empty_title">NO Consumption Records for this Month</string>
+    <string name="change_language">change language</string>
+    <string name="consumption_statistics">Consumption statistics for %1$s month</string>
+    <string name="catering">catering</string>
+    <string name="dailyuse">Daily use</string>
+    <string name="transportation">Transportation</string>
+    <string name="learning">Learning</string>
+    <string name="education">Education</string>
+    <string name="medical">Medical</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="shopping">Shopping</string>
+    <string name="Else">else</string>
+    <string name="emptyAccount">No Consumption Records for this Month</string>
+
 </resources>
