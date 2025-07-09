@@ -7,11 +7,14 @@ import org.wit.killbill.models.NotifyModel
 import android.view.LayoutInflater
 
 
-interface NotifyAdapterListener{
+interface NotifyAdapterListener {
     fun onCardClick(notify: NotifyModel, position: Int)
 }
 
-class NotifyAdapter(private var notifies: List<NotifyModel>, private val listener: NotifyAdapterListener ) :
+class NotifyAdapter(
+    private var notifies: List<NotifyModel>,
+    private val listener: NotifyAdapterListener
+) :
     RecyclerView.Adapter<NotifyAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -27,7 +30,7 @@ class NotifyAdapter(private var notifies: List<NotifyModel>, private val listene
 
     override fun getItemCount(): Int = notifies.size
 
-    class MainHolder(private val binding : CardBinding) :
+    class MainHolder(private val binding: CardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(notify: NotifyModel, listener: NotifyAdapterListener) {
@@ -35,7 +38,7 @@ class NotifyAdapter(private var notifies: List<NotifyModel>, private val listene
             binding.tvTitle.text = notify.amount.toString()
             binding.tvContent.text = notify.context
             binding.tvTime.text = notify.time
-            binding.root.setOnClickListener{listener.onCardClick(notify, adapterPosition)}
+            binding.root.setOnClickListener { listener.onCardClick(notify, adapterPosition) }
         }
     }
 }

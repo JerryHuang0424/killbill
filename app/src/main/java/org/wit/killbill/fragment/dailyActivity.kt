@@ -23,13 +23,14 @@ import java.util.Calendar
 
 class DailyFragment : Fragment(), NotifyAdapterListener {
     companion object {
-        // 添加 newInstance 方法
+        // add newInstance() method
         fun newInstance(): DailyFragment {
             return DailyFragment()
         }
     }
+
     private val handler = Handler(Looper.getMainLooper())
-    private val refreshInterval = 1000L // 1秒
+    private val refreshInterval = 1000L // 1s
     private var _binding: DailyStatusBinding? = null
     private val binding get() = _binding!!
     private lateinit var app: MainApp
@@ -49,11 +50,9 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         app = requireActivity().application as MainApp
 
-//        startAutoRefresh()
-        // 设置特定的时间，筛选全部账单中符合时间规定
+        // Set a specific time to filter all bills that meet the time requirements
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH) + 1
@@ -71,7 +70,8 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
 
                     if (modelYear == currentYear &&
                         modelMonth == currentMonth &&
-                        modelDay == currentDay) {
+                        modelDay == currentDay
+                    ) {
                         currentList.add(notifyModel)
                     }
                 }
@@ -86,7 +86,6 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
         binding.rvBillList.adapter = NotifyAdapter(currentList, this)
     }
 
-
     override fun onCardClick(notify: NotifyModel, pos: Int) {
         val launchIntentCard = Intent(requireContext(), PageMainActivity::class.java)
         launchIntentCard.putExtra("Notify_edit", notify)
@@ -94,18 +93,21 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
         getClickResult.launch(launchIntentCard)
     }
 
-    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == RESULT_OK) {
-            binding.rvBillList.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
+    private val getClickResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                binding.rvBillList.adapter?.notifyItemRangeChanged(
+                    0,
+                    app.notifyNotifyModels.findAll().size
+                )
+            }
+            if (it.resultCode == 99) {
+                binding.rvBillList.adapter?.notifyItemRemoved(position)
+            }
         }
-        if (it.resultCode == 99) {
-            binding.rvBillList.adapter?.notifyItemRemoved(position)
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        stopAutoRefresh()
         _binding = null
     }
 }

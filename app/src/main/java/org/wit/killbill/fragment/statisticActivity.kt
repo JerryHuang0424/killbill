@@ -29,11 +29,12 @@ import java.util.Calendar
 
 class StatisticFragment : Fragment(), NotifyAdapterListener {
     companion object {
-        // 添加 newInstance 方法
+        // add newInstance() method
         fun newInstance(): StatisticFragment {
             return StatisticFragment()
         }
     }
+
     private var _binding: StatisticBinding? = null
     private val binding get() = _binding!!
     private lateinit var app: MainApp
@@ -53,9 +54,8 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
 
         app = requireActivity().application as MainApp
 
-
-
-        // 设置特定的时间，筛选全部账单中符合时间规定
+        // Set a specific time to filter all bills
+        // that meet the time requirements
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH) + 1
@@ -92,11 +92,11 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
                 )
             }
 
-        // 设置饼图和数据
+        // Set up pie charts and data
         setupPieChart(mergedEntries)
         setupLegend(mergedEntries)
 
-        // 设置RecyclerView
+        // set RecyclerView
         val layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = NotifyAdapter(currentList, this)
@@ -109,14 +109,18 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
         getClickResult.launch(launchIntentCard)
     }
 
-    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if(it.resultCode == RESULT_OK) {
-            binding.recyclerView.adapter?.notifyItemRangeChanged(0, app.notifyNotifyModels.findAll().size)
+    private val getClickResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                binding.recyclerView.adapter?.notifyItemRangeChanged(
+                    0,
+                    app.notifyNotifyModels.findAll().size
+                )
+            }
+            if (it.resultCode == 99) {
+                binding.recyclerView.adapter?.notifyItemRemoved(position)
+            }
         }
-        if(it.resultCode == 99) {
-            binding.recyclerView.adapter?.notifyItemRemoved(position)
-        }
-    }
 
     private fun setupPieChart(entries: List<PieEntry>) {
         val pieChart = binding.pieChart

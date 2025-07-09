@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="#FFF5F5F5">
 
-    <!-- 主要内容区域 -->
+    <!-- Main content area -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- 橙色顶部工具栏 -->
+        <!-- Top orange decorative strip -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -28,7 +28,7 @@
                 app:titleTextColor="@android:color/white"/>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- 使用ScrollView包裹内容区域 -->
+        <!-- Use ScrollView to package the content area -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -50,10 +50,10 @@
                     android:columnCount="4"
                     android:layout_marginBottom="16dp">
 
-                    <!-- 子元素内容 -->
+                    <!-- Sub element content -->
                 </GridLayout>
 
-                <!-- 标题输入 - 橙色主题 -->
+                <!-- Title Input - Orange Theme -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -77,7 +77,7 @@
                         android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- 内容输入 - 橙色主题 -->
+                <!-- Content Input - Orange Theme -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                         android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- 时间输入 - 橙色主题 -->
+                <!-- Time Input - Orange Theme -->
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                         android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- 提交按钮 - 橙色主题 -->
+                <!-- Commit button - Orange Theme -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSubmit"
                     style="@style/Widget.MaterialComponents.Button"
@@ -139,7 +139,7 @@
                     android:textColor="@android:color/white"
                     app:cornerRadius="8dp"/>
 
-                <!-- 删除按钮 - 橙色浅色变体 -->
+                <!-- Delete button - Orange light color variant -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnDelete"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
