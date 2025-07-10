@@ -4,8 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.wit.killbill.R
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
 import org.wit.killbill.adapter.NotifyAdapterListener
@@ -29,8 +28,8 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
         }
     }
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val refreshInterval = 1000L // 1s
+//    private val handler = Handler(Looper.getMainLooper())
+//    private val refreshInterval = 1000L // 1s
     private var _binding: DailyStatusBinding? = null
     private val binding get() = _binding!!
     private lateinit var app: MainApp
@@ -78,7 +77,7 @@ class DailyFragment : Fragment(), NotifyAdapterListener {
             }
         }
 
-        binding.tvDate.text = "${currentYear} / ${currentMonth} / ${currentDay}"
+        binding.tvDate.text = getString(R.string.date_format, currentYear, currentMonth, currentDay)
         binding.tvTotalAmount.text = currentList.sumOf { it.amount }.toString()
 
         val layoutManager = LinearLayoutManager(requireContext())

@@ -33,5 +33,9 @@
     <string name="shopping">買い物</string>
     <string name="Else">その他</string>
     <string name="emptyAccount">今月の消費記録はありません</string>
+    <string name="total_expense_format">総消費: %.2f 円</string>
+    <string name="date_format">%1$d / %2$d / %3$d</string>
+
+
 
 </resources>

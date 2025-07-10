@@ -19,7 +19,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.charts.PieChart
+import android.graphics.Typeface
 import org.wit.killbill.R
 import org.wit.killbill.activity.PageMainActivity
 import org.wit.killbill.adapter.NotifyAdapter
@@ -182,13 +182,13 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
 
     private fun setupLegend(entries: List<PieEntry>) {
         val legendContainer = binding.legendContainer
-        val colors = listOf(
-            "#FF6384".toColorInt(),
-            "#36A2EB".toColorInt(),
-            "#FFCE56".toColorInt(),
-            "#4BC0C0".toColorInt(),
-            "#9966FF".toColorInt()
-        )
+//        val colors = listOf(
+//            "#FF6384".toColorInt(),
+//            "#36A2EB".toColorInt(),
+//            "#FFCE56".toColorInt(),
+//            "#4BC0C0".toColorInt(),
+//            "#9966FF".toColorInt()
+//        )
 
         legendContainer.removeAllViews()
 
@@ -200,14 +200,29 @@ class StatisticFragment : Fragment(), NotifyAdapterListener {
                 ).apply {
                     setMargins(0, 0, 0, 8)
                 }
-
                 text = "${entry.label}: ${entry.value}"
-                compoundDrawablePadding = 16
                 gravity = Gravity.CENTER_VERTICAL
             }
-
             legendContainer.addView(legendItem)
         }
+
+        // 汇总总金额并添加到 legendContainer 最后
+        val totalAmount = entries.sumOf { it.value.toDouble() }
+        val totalText = getString(R.string.total_expense_format, totalAmount)
+        val totalTextView = TextView(requireContext()).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            ).apply {
+                setMargins(0, 16, 0, 0)
+            }
+            text = totalText
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            gravity = Gravity.END
+        }
+        legendContainer.addView(totalTextView)
+
     }
 
     override fun onDestroyView() {

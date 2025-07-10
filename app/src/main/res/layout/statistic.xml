@@ -60,7 +60,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="12dp"/>
+                    android:padding="12dp">
+
+                    <!-- 图例项会在代码中动态添加 -->
+
+                    <!-- 汇总总额显示 -->
+                    <TextView
+                        android:id="@+id/totalAmountTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="总消费: 0.00 元"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:gravity="end"
+                        android:layout_marginTop="12dp"/>
+
+                </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <!-- 数据列表 -->

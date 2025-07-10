@@ -5,6 +5,8 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -19,22 +21,40 @@ import org.wit.killbill.databinding.MainActivityBinding
 import org.wit.killbill.fragment.DailyFragment
 import org.wit.killbill.fragment.NotifyListFragment
 import org.wit.killbill.fragment.StatisticFragment
+import org.wit.killbill.main.MainApp
 import org.wit.killbill.notifyServer.NotifyService
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: MainActivityBinding
     private lateinit var notifyService: NotifyService
+    private val handler = Handler(Looper.getMainLooper())
+    private var previousSize = 0
+    lateinit var app: MainApp
 
     companion object {
         private const val REQUEST_CODE = 9527
     }
 
+    private val checkRunnable = object : Runnable {
+        override fun run() {
+            val currentSize = app.notifyNotifyModels.findAll().size
+            if (currentSize != previousSize) {
+                previousSize = currentSize
+                restartCurrentFragment()
+            }
+            handler.postDelayed(this, 2000) // 每 2 秒检查一次
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        app =application as MainApp
         super.onCreate(savedInstanceState)
         binding = MainActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        previousSize = app.notifyNotifyModels.findAll().size
+        handler.post(checkRunnable)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
@@ -62,6 +82,26 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, DailyFragment.newInstance())
                 .commit()
+        }
+
+    }
+
+    fun restartCurrentFragment() {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.container)
+
+        currentFragment?.let {
+            val newFragment = when (it) {
+                is DailyFragment -> DailyFragment.newInstance()
+                is StatisticFragment -> StatisticFragment.newInstance()
+                is NotifyListFragment -> NotifyListFragment.newInstance()
+                else -> null
+            }
+
+            newFragment?.let { fragment ->
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit()
+            }
         }
     }
 
@@ -154,7 +194,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(checkRunnable)
+    }
+
 }
+
+
 
 // language change
 open class BaseActivity : AppCompatActivity() {
