@@ -127,6 +127,18 @@
                         android:textColor="@color/text_primary"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <!-- 相机按钮 - 橙色主题 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCamera"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/orange_primary"
+                    android:text="@string/Use_camera"
+                    android:textColor="@android:color/white"
+                    app:cornerRadius="8dp"/>
                 <!-- 提交按钮 - 橙色主题 -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSubmit"

@@ -1,12 +1,20 @@
 package org.wit.killbill.activity
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.GridLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.FileProvider
+import org.wit.killbill.BuildConfig
 import com.google.android.material.snackbar.Snackbar
 import org.wit.killbill.main.MainApp
 import org.wit.killbill.R
@@ -14,12 +22,19 @@ import org.wit.killbill.databinding.ActivityMainBinding
 import org.wit.killbill.models.NotifyModel
 import org.wit.killbill.helper.messageHelper
 import timber.log.Timber
+import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
 
 class PageMainActivity : AppCompatActivity(){
+    companion object {
+        private const val REQUEST_IMAGE_CAPTURE = 1
+        private const val REQUEST_IMAGE_GALLERY = 2
+    }
     private lateinit var binding: ActivityMainBinding
     private var notifyModel = NotifyModel()
     lateinit var app : MainApp
@@ -27,6 +42,8 @@ class PageMainActivity : AppCompatActivity(){
     private val mshelper: messageHelper = messageHelper()
     private lateinit var gridLayout: GridLayout
     private var selectedButton: Button? = null
+    private lateinit var photoUri: Uri
+    private lateinit var photoFile: File
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +92,10 @@ class PageMainActivity : AppCompatActivity(){
 
         }
 
+        binding.btnCamera.setOnClickListener() {
+            takePicture()
+        }
+
         binding.btnDelete.setOnClickListener(){
             setResult(99)
             app.notifyNotifyModels.delete(notifyModel)
@@ -107,6 +128,50 @@ class PageMainActivity : AppCompatActivity(){
             }
         }
 
+    }
+
+    private fun takePicture() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            try {
+                photoFile = createImageFile()
+            } catch (ex: IOException) {
+                Timber.e("Error creating image file")
+                return
+            }
+
+            photoUri = FileProvider.getUriForFile(
+                this,
+                "${BuildConfig.APPLICATION_ID}.fileprovider",
+                photoFile
+            )
+
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            // ⭐ 把图片 Uri 存进模型
+            notifyModel.imageUri = photoUri.toString()
+
+            // （可选）立刻显示在 ImageView
+            binding.imageView.setImageURI(photoUri)
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile():File{
+        val timeStamp = android.icu.text.SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(
+            Date())
+        val imageFileName = "JPEG_${timeStamp}_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(imageFileName,".jpg", storageDir)
     }
 
 
@@ -155,4 +220,6 @@ class PageMainActivity : AppCompatActivity(){
 
     // dp转px扩展函数
     private fun Int.dpToPx(): Int = (this * resources.displayMetrics.density).toInt()
+
+
 }

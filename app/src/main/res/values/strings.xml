@@ -13,6 +13,7 @@
     <string name="Bill_button">Bill</string>
     <string name="Statistic_button">Statistic</string>
     <string name="Setting_button">List</string>
+    <string name="Use_camera">Camera</string>
     <string name="Add_card_context">This is the detailed content…</string>
     <string name="Add_card_time_hint">Time</string>
     <string name="Add_card_title_hint">金额</string>
